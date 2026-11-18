@@ -1,0 +1,24 @@
+{
+  "name": "v2raynverge-cc-guide",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "v2rayn指南 (v2raynverge.cc) - 中文机场与 VPN 专业评测媒体 + Astro 卡片式博客 + 品牌评测数据库 + 网络工具知识库",
+  "scripts": {
+    "dev": "astro dev --port 8088",
+    "start": "astro dev --port 8088",
+    "validate": "node scripts/validate-site.mjs",
+    "build": "node scripts/validate-site.mjs && astro build && npx pagefind --site dist && node scripts/validate-dist.mjs",
+    "preview": "astro preview --port 8088",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/sitemap": "^3.4.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "astro": "^5.12.0",
+    "pagefind": "^1.3.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,89 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import GuideCard from '@/components/cards/GuideCard.astro';
+import { getAllPublishedContent } from '@/utils/content';
+import { PROXY_CLIENTS } from '@/data/clients';
+
+const allContent = await getAllPublishedContent();
+const guides = allContent.filter((i) => i.collection === 'guides');
+---
+
+<BaseLayout
+  title="2026 v2rayN 与 Clash Verge Rev 客户端教程与排障知识库 - v2rayn指南"
+  description="覆盖 Windows、macOS、Android、iOS、Linux 与 OpenWrt 软路由的 20+ 款第三方代理客户端下载、订阅导入、TUN 虚拟网卡配置与 Timeout 故障排查教程。"
+  breadcrumbs={[{ name: '客户端教程库', url: '/guides/' }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-12">
+    <Breadcrumb items={[{ name: '客户端教程库', url: '/guides/' }]} />
+
+    <div class="max-w-3xl">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600">CLIENT KNOWLEDGE BASE</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+        v2rayN & Clash 全平台客户端教程与排障手册
+      </h1>
+      <p class="text-base text-slate-600 mt-2">
+        从安装架构识别、通用订阅导入、Mihomo 内核覆写到节点 Timeout 急救，提供手把手图文级步骤。
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {guides.map((item) => <GuideCard item={item} badge="核心实操手册" />)}
+    </div>
+
+    <!-- 20款客户端完整核实表 -->
+    <section class="pt-10 border-t border-slate-200">
+      <h2 class="text-2xl font-extrabold text-slate-900 mb-4">
+        2026 第三方通用代理客户端核实总表 (20+ 款工具)
+      </h2>
+      <div class="editorial-card overflow-hidden bg-white">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-white">
+                <th class="py-3.5 px-4 font-bold">客户端名称</th>
+                <th class="py-3.5 px-4 font-bold">支持平台</th>
+                <th class="py-3.5 px-4 font-bold">底层核心引擎</th>
+                <th class="py-3.5 px-4 font-bold">维护与安全状态</th>
+                <th class="py-3.5 px-4 font-bold">特点与重要提醒</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              {
+                PROXY_CLIENTS.map((c) => (
+                  <tr class="hover:bg-blue-50/30">
+                    <td class="py-3.5 px-4 font-extrabold text-slate-900">
+                      <a href={`/guides/${c.relatedGuideSlug}/`} class="hover:text-blue-600">
+                        {c.name}
+                      </a>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs text-slate-700">{c.platforms.join(' / ')}</td>
+                    <td class="py-3.5 px-4 font-mono text-xs text-blue-700">{c.coreEngine}</td>
+                    <td class="py-3.5 px-4">
+                      <span
+                        class:list={[
+                          'px-2 py-0.5 rounded-full text-[11px] font-bold',
+                          c.maintenanceStatus.includes('Caution')
+                            ? 'bg-rose-100 text-rose-700'
+                            : c.maintenanceStatus.includes('Watch')
+                              ? 'bg-amber-100 text-amber-800'
+                              : 'bg-emerald-50 text-emerald-700',
+                        ]}
+                      >
+                        {c.maintenanceStatus}
+                      </span>
+                    </td>
+                    <td class="py-3.5 px-4 text-xs text-slate-600 max-w-md">
+                      <p class="font-medium text-slate-800">{c.features[0]}</p>
+                      <p class="text-slate-500 mt-0.5">{c.importantNotes}</p>
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

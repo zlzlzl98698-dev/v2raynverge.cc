@@ -1,0 +1,17 @@
+主实体名称,实体类型,关联关系,目标实体名称,目标实体类型,核实状态,实体属性与条件化结论,权威来源页面
+光速云,AirportBrand,USES_ARCHITECTURE,IEPL专线+企业级内网专线,NetworkArchitecture,measured,2020年运营;单节点最高标称2.5Gbps;香港实测22ms/529Mbps,/reviews/guangsuyun-in-depth-review/
+光速云,AirportBrand,USES_PROTOCOL,VLESS,ProxyProtocol,measured,支持官方自研客户端与v2rayN/Clash Verge Rev通用订阅双导入,/brands/guangsuyun/
+光速云,AirportBrand,OFFERS_PLAN,致敬斯诺克147永久套餐,PricingPlan,measured,一次性付费147元含247GB不过期流量(折合0.595元/GB),/brands/guangsuyun/
+光速云,AirportBrand,OFFERS_PLAN,光速云·轻量版,PricingPlan,measured,年付99元每月69GB(早期摘要曾记59GB);折合8.25元/月,/brands/guangsuyun/
+暮光加速,AirportBrand,USES_ARCHITECTURE,BGP智能调度+专线级出口,NetworkArchitecture,measured,2023年运营;月付20元起120GB;日本实测53ms/150Mbps,/brands/muguang/
+飞猫云,AirportBrand,USES_CLIENT_MODE,仅官方专属客户端,ClientMode,measured,学生版年付84元(折7元/月);香港实测21ms/526Mbps;免配订阅,/brands/feimao/
+微风网络,AirportBrand,USES_ARCHITECTURE,IEPL专线,NetworkArchitecture,measured,清风年付137元享100GB/月;香港实测25ms/546Mbps,/brands/weifeng/
+星岛梦,AirportBrand,USES_PROTOCOL,Trojan,ProxyProtocol,measured,2020年老牌;1倍流量不限设备;永久包100元/100GB起,/brands/xingdaomeng/
+一翻云,AirportBrand,USES_PROTOCOL,Hysteria 2 / VLESS-Reality / Shadowsocks,ProxyProtocol,measured,IEPL物理专线+原生住宅IP;月付20元享150GB,/brands/yifan/
+Firefly 萤火虫,AirportBrand,HAS_SISTER_BRAND,微风网络 / 飞鸟 / 一云梯,AirportBrand,historical,合并去重词条;2026-08历史资料记录存在同系关系;香港547Mbps,/brands/firefly/
+可信云,AirportBrand,DISCLOSES_GAP,AI与流媒体实测数据缺口,AuditStatus,vendor,25元/150GB IEPL+VLESS;主动声明缺乏统一实测保持中性描述,/brands/kexin/
+梯子云,AirportBrand,USES_CLIENT_MODE,自研全平台客户端+通用订阅双支持,ClientMode,vendor,2025年运营;年付折合7.4元/月;零门槛一键登录兼顾通用订阅,/brands/tiziyun/
+v2rayN,ProxyClient,EMBEDS_ENGINE,Xray-core / sing-box / Mihomo,CoreEngine,measured,支持Win/macOS/Linux;推荐下载SelfContained包,/guides/v2rayn-complete-tutorial-windows/
+Clash Verge Rev,ProxyClient,EMBEDS_ENGINE,Mihomo (Clash Meta),CoreEngine,measured,基于Tauri轻量开发;支持Service Mode虚拟网卡与Merge覆写,/guides/clash-verge-rev-subscription-import-guide/
+NekoBox for Android,ProxyClient,HAS_SECURITY_WARNING,Google Play第三方控制同名版,SecurityAlert,measured,官方提示维护有限且严禁下载Google Play已被第三方接管版本,/articles/clash-clients-ecosystem-overview-2026/
+Nikki,ProxyClient,REQUIRES_OS,OpenWrt 24.10+,OperatingSystem,measured,软路由Mihomo透明代理插件明确要求OpenWrt 24.10及以上,/articles/clash-clients-ecosystem-overview-2026/

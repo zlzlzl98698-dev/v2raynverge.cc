@@ -1,0 +1,105 @@
+---
+import type { AirportBrand } from '@/data/brands';
+
+export interface Props {
+  brand?: AirportBrand;
+  isConceptual?: boolean;
+}
+
+const { brand, isConceptual = false } = Astro.props;
+
+const title = brand
+  ? `${brand.name} (${brand.lineType}) 网络传输路径与拓扑架构图`
+  : 'IEPL / IPLC 专线机场标准三段式网络拓扑架构图';
+
+const protocolLabel = brand ? brand.protocols.join(' / ') : 'VLESS / Trojan / Hysteria 2';
+const lineLabel = brand ? brand.lineType : 'IEPL / IPLC 内网物理专线';
+const regionLabel = brand ? brand.nodeRegions.slice(0, 5).join(' · ') : '香港 / 东京 / 新加坡 / 台北 / 洛杉矶';
+---
+
+<section
+  class="observatory-panel p-5 sm:p-6 my-8 shadow-lg"
+  aria-label={title}
+>
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-700/80">
+    <div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <h3 class="text-base sm:text-lg font-extrabold text-white">{title}</h3>
+        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800 text-amber-300 border border-slate-700">
+          {isConceptual || !brand ? 'ARCHITECTURAL SCHEMATIC · 概念架构示意' : 'BRAND LINE TOPOLOGY · 品牌资料架构示意'}
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">
+        展示从本地客户端加密封装、国内多线 BGP 入口到跨境专线直连及海外原生 IP 落地的完整数据路径
+      </p>
+    </div>
+    <span class="text-xs font-mono text-sky-400">Anti-QoS · Native IP Routing</span>
+  </div>
+
+  <!-- 拓扑路径可视化流程 -->
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 my-6 items-stretch">
+    <!-- 节点 1：用户终端与客户端 -->
+    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex flex-col justify-between relative">
+      <div>
+        <span class="text-[11px] font-mono text-sky-400 block mb-1">STAGE 01 · CLIENT ENDPOINT</span>
+        <h4 class="text-sm font-bold text-white">用户设备与代理内核</h4>
+        <p class="text-xs text-slate-400 mt-1.5">
+          {brand ? brand.supportedClients.slice(0, 4).join(' / ') : 'v2rayN / Clash Verge Rev / 小火箭'}
+        </p>
+      </div>
+      <div class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] font-mono text-emerald-400">
+        封装协议: {protocolLabel}
+      </div>
+    </div>
+
+    <!-- 节点 2：国内中转 BGP 入口 -->
+    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex flex-col justify-between relative">
+      <div>
+        <span class="text-[11px] font-mono text-sky-400 block mb-1">STAGE 02 · DOMESTIC INGRESS</span>
+        <h4 class="text-sm font-bold text-white">国内多线 BGP 中转入口</h4>
+        <p class="text-xs text-slate-400 mt-1.5">
+          电信 / 联通 / 移动三网就近接入（如深港/沪日/穗新入口），隐藏海外真实落地 IP
+        </p>
+      </div>
+      <div class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] font-mono text-sky-300">
+        特性: 低延迟握手 + 入口防封锁
+      </div>
+    </div>
+
+    <!-- 节点 3：跨境专线内网通道 (核心粗实线示意) -->
+    <div class="p-4 rounded-xl bg-blue-950/60 border-2 border-sky-500/60 flex flex-col justify-between relative">
+      <div>
+        <span class="text-[11px] font-mono text-amber-300 font-bold block mb-1">STAGE 03 · DEDICATED BACKBONE</span>
+        <h4 class="text-sm font-bold text-white">{lineLabel} 跨境直连</h4>
+        <p class="text-xs text-slate-300 mt-1.5">
+          内网以太网物理/逻辑专线过境，避开公网国际出口拥塞与晚高峰 QoS 流量特征限速
+        </p>
+      </div>
+      <div class="mt-3 pt-2.5 border-t border-sky-800/60 text-[11px] font-mono text-emerald-300 font-semibold">
+        ═══ 专线直连 · 晚高峰抗丢包 ═══
+      </div>
+    </div>
+
+    <!-- 节点 4：海外落地与目标应用分流 -->
+    <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-700 flex flex-col justify-between relative">
+      <div>
+        <span class="text-[11px] font-mono text-sky-400 block mb-1">STAGE 04 · EGRESS & UNLOCK</span>
+        <h4 class="text-sm font-bold text-white">海外落地与原生 IP 解锁</h4>
+        <p class="text-xs text-slate-400 mt-1.5">
+          节点分布：{regionLabel}
+        </p>
+      </div>
+      <div class="mt-3 pt-2.5 border-t border-slate-800 text-[11px] font-mono text-emerald-400">
+        ├─▶ ChatGPT / Claude / Netflix<br />
+        └─▶ 全球常规互联网高速访问
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-3.5 border-t border-slate-800 text-xs text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <p>
+      <strong>拓扑结构文字说明：</strong>本图为根据品牌公开的“{lineLabel}”与“{protocolLabel}”技术参数绘制的架构示意图（非机房内部私有路由表），用于说明专线防 QoS 与原生 IP 解锁的工作原理。
+    </p>
+    <span class="font-mono text-[11px] text-slate-500 shrink-0">[Network Path Observatory]</span>
+  </div>
+</section>

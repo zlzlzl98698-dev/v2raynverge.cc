@@ -1,0 +1,335 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import BrandCard from '@/components/cards/BrandCard.astro';
+import { AIRPORT_BRANDS } from '@/data/brands';
+import { SITE_CONFIG } from '@/data/site';
+
+const itemList = AIRPORT_BRANDS.map((b, idx) => ({
+  name: `${b.name} (${b.lineType})`,
+  url: `/brands/${b.slug}/`,
+  position: idx + 1,
+}));
+---
+
+<BaseLayout
+  title="2026 机场品牌评测数据库：31家独立去重品牌检索、价格筛选与实测状态"
+  description="v2rayn指南 31 家独立去重机场品牌数据库：支持按 IEPL/IPLC 专线类型、VLESS/Trojan/Hysteria2 协议、月均价格、客户端兼容模式、AI/流媒体解锁及数据核实状态实时检索。"
+  breadcrumbs={[{ name: '品牌数据库', url: '/brands/' }]}
+  itemList={itemList}
+>
+  <section class="bg-slate-900 text-white py-10 sm:py-14 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-slate-400">
+        <Breadcrumb items={[{ name: '品牌数据库 (31家)', url: '/brands/' }]} />
+      </div>
+
+      <div class="max-w-4xl">
+        <div class="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-300 text-xs font-mono font-bold mb-3">
+          <span>VERIFIED AIRPORT DATABASE · 2026-10-19 / 2026-11-18 AUDIT</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+          2026 中文机场品牌评测数据库（31 家去重审计）
+        </h1>
+        <p class="text-sm sm:text-base text-slate-300 mt-3 leading-relaxed">
+          本库提取自原始 32 条品牌档案（合并重复录入的 Firefly 与萤火虫后共 <strong>31 家独立品牌</strong>）。所有卡片均静态输出完整 HTML 供搜索引擎抓取，并支持按名称、价格、线路、客户端兼容性、AI/流媒体场景及数据核实状态实时筛选。
+        </p>
+      </div>
+
+      <!-- 数据真实性与商业合规提示栏 -->
+      <div class="mt-6 p-4 rounded-2xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <strong class="text-emerald-400 block mb-0.5">1. 数据真实性承诺</strong>
+          拒绝编造测速或价格。无实测表的品牌明确标记为 `vendor`（品牌资料）或 `pending`（待核实）。
+        </div>
+        <div>
+          <strong class="text-sky-400 block mb-0.5">2. 同质化与同系审计</strong>
+          明确标注 5.6 元档五家同规格矩阵、Firefly/微风同系关系及云界线/环球梯链接格式异常。
+        </div>
+        <div>
+          <strong class="text-amber-300 block mb-0.5">3. 商业合作透明披露</strong>
+          {SITE_CONFIG.disclosure.affiliateNotice} 商业置顶不代表独立测速第一。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 交互式检索与多维筛选控制台 -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <section class="editorial-card p-5 sm:p-6 bg-white mb-8" aria-label="品牌数据库筛选器">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3.5">
+        <!-- 1. 关键词搜索 -->
+        <div class="lg:col-span-2">
+          <label for="brand-search-input" class="block text-xs font-bold text-slate-700 mb-1.5">
+            搜索品牌名称 / 协议 / 优惠码
+          </label>
+          <input
+            type="search"
+            id="brand-search-input"
+            placeholder="例如：光速云、VLESS、Hysteria 2、147、TikTok..."
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-900 focus:bg-white focus:border-blue-600"
+          />
+        </div>
+
+        <!-- 2. 线路类型筛选 -->
+        <div>
+          <label for="filter-line" class="block text-xs font-bold text-slate-700 mb-1.5">
+            线路架构筛选
+          </label>
+          <select
+            id="filter-line"
+            class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800"
+          >
+            <option value="all">全部线路类型 (31)</option>
+            <option value="IEPL">IEPL 专线 (含双线)</option>
+            <option value="IPLC">IPLC 专线</option>
+            <option value="BGP">BGP 智能调度</option>
+            <option value="中转">中转优化线路</option>
+          </select>
+        </div>
+
+        <!-- 3. 价格区间筛选 -->
+        <div>
+          <label for="filter-price" class="block text-xs font-bold text-slate-700 mb-1.5">
+            起步月均成本
+          </label>
+          <select
+            id="filter-price"
+            class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800"
+          >
+            <option value="all">全部价格区间</option>
+            <option value="under6">极限平价 (≤ ¥6/月)</option>
+            <option value="6to9">百元内年付折算 (¥6.5–¥9.5/月)</option>
+            <option value="10to25">主流月付/中档 (¥10–¥25/月)</option>
+          </select>
+        </div>
+
+        <!-- 4. 客户端兼容筛选 -->
+        <div>
+          <label for="filter-client" class="block text-xs font-bold text-slate-700 mb-1.5">
+            客户端支持方式
+          </label>
+          <select
+            id="filter-client"
+            class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800"
+          >
+            <option value="all">全部客户端方式</option>
+            <option value="dual">自研 + 通用订阅双支持</option>
+            <option value="universal">支持 Clash / v2rayN 通用订阅</option>
+            <option value="proprietary">仅官方专属客户端（免配置）</option>
+          </select>
+        </div>
+
+        <!-- 5. 数据核实状态与排序 -->
+        <div>
+          <label for="filter-status" class="block text-xs font-bold text-slate-700 mb-1.5">
+            数据核实状态与排序
+          </label>
+          <select
+            id="filter-status"
+            class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-800"
+          >
+            <option value="all">全部核实状态 (默认排序)</option>
+            <option value="measured">仅看已实测品牌 (15家)</option>
+            <option value="vendor">品牌资料核实 (12家)</option>
+            <option value="historical">历史档案/待核实 (4家)</option>
+            <option value="sort-price-asc">按折算起步价：从低到高</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 快捷场景筛选标签栏与结果计数 -->
+      <div class="mt-4 pt-3.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="font-bold text-slate-700 mr-1">快捷场景筛选：</span>
+          <button type="button" data-quick-filter="all" class="quick-filter-btn px-2.5 py-1 rounded-lg bg-blue-600 text-white font-semibold cursor-pointer">
+            全部 (31)
+          </button>
+          <button type="button" data-quick-filter="2020" class="quick-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 cursor-pointer">
+            2020年老牌 (光速云/星岛梦)
+          </button>
+          <button type="button" data-quick-filter="unlimited" class="quick-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 cursor-pointer">
+            含永久不限时流量包
+          </button>
+          <button type="button" data-quick-filter="ai" class="quick-filter-btn px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 text-slate-700 cursor-pointer">
+            ChatGPT/Claude 实测支持
+          </button>
+          <button type="button" data-quick-filter="reset" class="px-2.5 py-1 rounded-lg text-slate-500 hover:text-rose-600 underline cursor-pointer">
+            重置筛选条件
+          </button>
+        </div>
+
+        <div class="font-mono text-slate-600">
+          当前匹配显示：<strong id="brand-count-num" class="text-blue-600 font-extrabold">{AIRPORT_BRANDS.length}</strong> / {AIRPORT_BRANDS.length} 家品牌
+        </div>
+      </div>
+    </section>
+
+    <!-- 品牌卡片静态渲染网格（保证搜索引擎 100% 抓取全部 31 家卡片） -->
+    <div id="brand-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+        AIRPORT_BRANDS.map((brand) => {
+          const hasUnlimited = brand.plans.some((p) => p.billingCycle === '一次性付费');
+          const aiSupported = brand.unlockMatrix.chatgpt === 'supported' || brand.unlockMatrix.claude === 'supported';
+          return (
+            <div
+              class="brand-grid-item"
+              data-name={`${brand.name} ${brand.englishName} ${brand.aliases.join(' ')} ${brand.protocols.join(' ')} ${brand.couponCode} ${brand.shortPositioning}`.toLowerCase()}
+              data-line={brand.lineType}
+              data-price={String(brand.startingMonthlyCost)}
+              data-client={brand.clientSupport}
+              data-status={brand.dataStatus}
+              data-rank={String(brand.rank)}
+              data-year={brand.foundedYear}
+              data-unlimited={hasUnlimited ? 'true' : 'false'}
+              data-ai={aiSupported ? 'true' : 'false'}
+            >
+              <BrandCard brand={brand} />
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <!-- 空状态与无结果提示 -->
+    <div id="brand-empty-state" class="hidden editorial-card p-12 text-center bg-slate-50 my-8">
+      <h3 class="text-lg font-extrabold text-slate-900">未找到同时满足以上筛选条件的机场品牌</h3>
+      <p class="text-sm text-slate-600 mt-2 max-w-md mx-auto">
+        请尝试放宽价格区间或切换客户端兼容方式（例如查看同时支持自研客户端与通用订阅的光速云或梯子云）。
+      </p>
+      <button
+        type="button"
+        id="brand-empty-reset"
+        class="mt-4 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-bold hover:bg-blue-700 cursor-pointer"
+      >
+        恢复显示全部 31 家品牌
+      </button>
+    </div>
+  </div>
+
+  <!-- 轻量原生 JS 筛选与排序逻辑 -->
+  <script is:inline>
+    (() => {
+      const searchInput = document.getElementById('brand-search-input');
+      const lineSelect = document.getElementById('filter-line');
+      const priceSelect = document.getElementById('filter-price');
+      const clientSelect = document.getElementById('filter-client');
+      const statusSelect = document.getElementById('filter-status');
+      const grid = document.getElementById('brand-cards-grid');
+      const items = Array.from(document.querySelectorAll('.brand-grid-item'));
+      const countNum = document.getElementById('brand-count-num');
+      const emptyState = document.getElementById('brand-empty-state');
+      const emptyReset = document.getElementById('brand-empty-reset');
+      const quickBtns = document.querySelectorAll('[data-quick-filter]');
+
+      let activeQuick = 'all';
+
+      // 支持从 URL 参数初始化筛选
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('line') && lineSelect) lineSelect.value = params.get('line');
+      if (params.get('client') && clientSelect) clientSelect.value = params.get('client');
+      if (params.get('status') && statusSelect) statusSelect.value = params.get('status');
+      if (params.get('q') && searchInput) searchInput.value = params.get('q');
+
+      function applyFilters() {
+        const q = (searchInput?.value || '').trim().toLowerCase();
+        const line = lineSelect?.value || 'all';
+        const price = priceSelect?.value || 'all';
+        const client = clientSelect?.value || 'all';
+        const status = statusSelect?.value || 'all';
+
+        let visibleCount = 0;
+
+        items.forEach((el) => {
+          const dName = el.getAttribute('data-name') || '';
+          const dLine = el.getAttribute('data-line') || '';
+          const dPrice = parseFloat(el.getAttribute('data-price') || '0');
+          const dClient = el.getAttribute('data-client') || '';
+          const dStatus = el.getAttribute('data-status') || '';
+          const dYear = el.getAttribute('data-year') || '';
+          const dUnlimited = el.getAttribute('data-unlimited') === 'true';
+          const dAi = el.getAttribute('data-ai') === 'true';
+
+          let match = true;
+
+          if (q && !dName.includes(q)) match = false;
+          if (line !== 'all' && !dLine.includes(line)) match = false;
+
+          if (price === 'under6' && dPrice > 6.0) match = false;
+          if (price === '6to9' && (dPrice <= 6.0 || dPrice > 9.5)) match = false;
+          if (price === '10to25' && dPrice < 9.5) match = false;
+
+          if (client === 'dual' && !dClient.includes('双支持')) match = false;
+          if (client === 'universal' && !(dClient.includes('通用订阅') || dClient.includes('双支持'))) match = false;
+          if (client === 'proprietary' && !dClient.includes('仅专属客户端')) match = false;
+
+          if (status === 'measured' && dStatus !== 'measured') match = false;
+          if (status === 'vendor' && dStatus !== 'vendor') match = false;
+          if (status === 'historical' && !(dStatus === 'historical' || dStatus === 'pending')) match = false;
+
+          if (activeQuick === '2020' && dYear !== '2020') match = false;
+          if (activeQuick === 'unlimited' && !dUnlimited) match = false;
+          if (activeQuick === 'ai' && !dAi) match = false;
+
+          if (match) {
+            el.classList.remove('hidden');
+            visibleCount++;
+          } else {
+            el.classList.add('hidden');
+          }
+        });
+
+        // 排序处理
+        if (grid) {
+          const sorted = [...items].sort((a, b) => {
+            if (status === 'sort-price-asc') {
+              return parseFloat(a.getAttribute('data-price') || '99') - parseFloat(b.getAttribute('data-price') || '99');
+            }
+            return parseInt(a.getAttribute('data-rank') || '99', 10) - parseInt(b.getAttribute('data-rank') || '99', 10);
+          });
+          sorted.forEach((node) => grid.appendChild(node));
+        }
+
+        if (countNum) countNum.textContent = String(visibleCount);
+        if (emptyState) {
+          if (visibleCount === 0) {
+            emptyState.classList.remove('hidden');
+          } else {
+            emptyState.classList.add('hidden');
+          }
+        }
+      }
+
+      function resetAll() {
+        if (searchInput) searchInput.value = '';
+        if (lineSelect) lineSelect.value = 'all';
+        if (priceSelect) priceSelect.value = 'all';
+        if (clientSelect) clientSelect.value = 'all';
+        if (statusSelect) statusSelect.value = 'all';
+        activeQuick = 'all';
+        applyFilters();
+      }
+
+      searchInput?.addEventListener('input', applyFilters);
+      lineSelect?.addEventListener('change', applyFilters);
+      priceSelect?.addEventListener('change', applyFilters);
+      clientSelect?.addEventListener('change', applyFilters);
+      statusSelect?.addEventListener('change', applyFilters);
+      emptyReset?.addEventListener('click', resetAll);
+
+      quickBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const val = btn.getAttribute('data-quick-filter') || 'all';
+          if (val === 'reset') {
+            resetAll();
+            return;
+          }
+          activeQuick = val;
+          applyFilters();
+        });
+      });
+
+      applyFilters();
+    })();
+  </script>
+</BaseLayout>

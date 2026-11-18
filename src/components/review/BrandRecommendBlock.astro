@@ -1,0 +1,86 @@
+---
+import { getBrandsBySlugs, TOP_RECOMMENDED_BRANDS } from '@/data/brands';
+import { SITE_CONFIG } from '@/data/site';
+
+export interface Props {
+  brandSlugs?: string[];
+  title?: string;
+  contextNote?: string;
+}
+
+const {
+  brandSlugs = ['guangsuyun', 'muguang', 'feimao'],
+  title = '关联品牌实测档案与合规选购入口',
+  contextNote = '以下推荐基于本文讨论的技术场景匹配。建议首次购买优先选择月付或小额套餐验证本地晚高峰表现。',
+} = Astro.props;
+
+const matched = getBrandsBySlugs(brandSlugs);
+const brands = matched.length > 0 ? matched : TOP_RECOMMENDED_BRANDS.slice(0, 3);
+---
+
+<aside class="my-10 editorial-card p-6 bg-gradient-to-br from-blue-50/70 via-white to-slate-50 border-blue-200" aria-label={title}>
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-blue-100">
+    <div>
+      <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-[11px] font-bold mb-1.5">
+        <span>场景化方案匹配 · 商业合作披露</span>
+      </div>
+      <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">{title}</h3>
+      <p class="text-xs sm:text-sm text-slate-600 mt-1">{contextNote}</p>
+    </div>
+    <a href="/brands/" class="text-xs font-bold text-blue-600 hover:underline shrink-0">
+      对比全部 31 家品牌 &rarr;
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-5">
+    {
+      brands.slice(0, 3).map((brand) => (
+        <div class="p-4 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-2xs">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2">
+                <img src={brand.logo} alt={`${brand.name} Logo`} width="32" height="32" loading="lazy" class="w-8 h-8 rounded-lg object-cover border border-slate-200" />
+                <a href={`/brands/${brand.slug}/`} class="font-extrabold text-slate-900 hover:text-blue-600">
+                  {brand.name}
+                </a>
+              </div>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold">
+                {brand.lineType}
+              </span>
+            </div>
+
+            <p class="text-xs font-bold text-slate-800 mb-1.5">{brand.startingPriceLabel}</p>
+            <p class="text-xs text-slate-600 line-clamp-2 mb-2">{brand.shortPositioning}</p>
+
+            <div class="text-[11px] text-slate-500 bg-slate-50 p-2 rounded-lg space-y-1">
+              <p><strong class="text-slate-700">适用：</strong>{brand.suitableFor[0]}</p>
+              <p><strong class="text-amber-700">注意：</strong>{brand.limitations[0]}</p>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center gap-2">
+            <a
+              href={`/brands/${brand.slug}/`}
+              class="flex-1 text-center py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+            >
+              评测档案
+            </a>
+            <a
+              href={brand.affiliateUrl}
+              target="_blank"
+              rel="nofollow sponsored noopener"
+              class="flex-1 text-center py-1.5 px-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold"
+            >
+              注册入口 &nearr;
+            </a>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="mt-4 pt-3 border-t border-blue-100/80 text-[11px] text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+    <p><strong>合规提醒：</strong>{SITE_CONFIG.disclosure.affiliateNotice}</p>
+    <p>{SITE_CONFIG.disclosure.editorialIndependence}</p>
+  </div>
+</aside>

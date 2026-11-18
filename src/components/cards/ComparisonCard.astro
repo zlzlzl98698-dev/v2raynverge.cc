@@ -1,0 +1,37 @@
+---
+import type { UnifiedContentItem } from '@/utils/content';
+
+export interface Props {
+  item: UnifiedContentItem;
+}
+
+const { item } = Astro.props;
+---
+
+<article class="editorial-card p-5 sm:p-6 bg-white flex flex-col justify-between group h-full border-l-4 border-l-blue-600">
+  <div>
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+      <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+        多维横向对比 (VS)
+      </span>
+      <span class="text-xs font-mono text-slate-400">核实于 {item.updatedDate}</span>
+    </div>
+    <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+      <a href={item.url}>{item.title}</a>
+    </h3>
+    <p class="text-sm text-slate-600 mt-2.5 line-clamp-3 leading-relaxed">
+      {item.excerpt}
+    </p>
+  </div>
+
+  <div class="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
+    <div class="flex flex-wrap gap-1.5">
+      {item.tags.slice(0, 3).map((tag) => (
+        <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">{tag}</span>
+      ))}
+    </div>
+    <a href={item.url} class="font-bold text-blue-600 shrink-0">
+      查看对比矩阵 &rarr;
+    </a>
+  </div>
+</article>

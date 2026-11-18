@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="60%" stop-color="#EFF6FF"/>
+      <stop offset="100%" stop-color="#EDE9FE"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#CBD5E1" stroke-width="0.7" stroke-opacity="0.45"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="1030" cy="140" r="220" fill="#7C3AED" fill-opacity="0.07"/>
+  <circle cx="960" cy="480" r="160" fill="#7C3AED" fill-opacity="0.05"/>
+  <rect x="72" y="68" width="1056" height="494" rx="28" fill="#FFFFFF" fill-opacity="0.92" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="120" y="124" width="320" height="42" rx="21" fill="#7C3AED" fill-opacity="0.1"/>
+  <text x="144" y="151" fill="#7C3AED" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700" letter-spacing="1.5">ARCHITECTURE COMPARISON</text>
+  <text x="120" y="258" fill="#0F172A" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="46" font-weight="800">传统商业 VPN 与专线机场深度对比</text>
+  <text x="120" y="328" fill="#475569" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="500">连通率 · 规则分流粒度 · 专属客户端 vs 通用订阅</text>
+  <line x1="120" y1="395" x2="1080" y2="395" stroke="#E2E8F0" stroke-width="2"/>
+  <rect x="120" y="432" width="180" height="54" rx="12" fill="#7C3AED"/>
+  <text x="150" y="466" fill="#FFFFFF" font-family="system-ui, -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700">v2rayn指南</text>
+  <text x="324" y="466" fill="#64748B" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="600">v2raynverge.cc · 独立数据审计与实测智库</text>
+  <g transform="translate(860, 425)">
+    <rect width="220" height="68" rx="14" fill="#0F172A"/>
+    <circle cx="30" cy="34" r="7" fill="#10B981"/>
+    <text x="50" y="30" fill="#94A3B8" font-family="ui-monospace, monospace" font-size="12">STATUS: VERIFIED</text>
+    <text x="50" y="50" fill="#F8FAFC" font-family="ui-monospace, monospace" font-size="15" font-weight="700">2026 DATA MATRIX</text>
+  </g>
+</svg>

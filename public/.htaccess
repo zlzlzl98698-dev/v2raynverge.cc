@@ -1,0 +1,102 @@
+# =====================================================================
+# v2rayn指南 (v2raynverge.cc / clash-cloud.run) Apache 生产环境静态部署配置
+# 架构：Astro Static Output + Directory Trailing Slash + Pagefind 索引
+# =====================================================================
+
+# 1. 禁止目录浏览与启用符号链接跟随
+Options -Indexes +FollowSymLinks
+
+# 2. 默认目录首页文件
+DirectoryIndex index.html
+
+# 3. 默认字符集
+AddDefaultCharset UTF-8
+
+# 4. 真实 404 错误页（严禁 SPA 全局回退到首页）
+ErrorDocument 404 /404.html
+
+# 5. URL 重写与规范化规则
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 5.1 域名规范化：www 统一 301 重定向至正式裸域（https://v2raynverge.cc/）
+  RewriteCond %{HTTP_HOST} ^www\.v2raynverge\.cc$ [NC]
+  RewriteRule ^(.*)$ https://v2raynverge.cc/$1 [R=301,L]
+
+  # 5.2 兼容反向代理/CDN 的 HTTPS 跳转（仅在明确非 HTTPS 且非本地调试时触发，避免循环重定向）
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1) [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # 5.3 移除重复斜杠
+  RewriteCond %{THE_REQUEST} \s[^?]*//
+  RewriteRule ^(.*)/+(.*)$ /$1/$2 [R=301,L]
+
+  # 5.4 兼容通用 sitemap.xml 请求指向 sitemap-index.xml
+  RewriteRule ^sitemap\.xml$ sitemap-index.xml [L]
+
+  # 5.5 将显式 /index.html 规范化为目录 URL（保留尾部斜杠）
+  RewriteCond %{THE_REQUEST} /index\.html[\s?] [NC]
+  RewriteRule ^(.*)index\.html$ /$1 [R=301,L]
+
+  # 5.6 为真实存在但缺少尾部斜杠的目录自动补充尾部斜杠（排除静态资源文件）
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_URI} !/$
+  RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{1,6}$
+  RewriteRule ^(.+)$ /$1/ [R=301,L]
+</IfModule>
+
+# 6. MIME 类型支持（含 Pagefind 搜索索引文件与现代图片格式）
+<IfModule mod_mime.c>
+  AddType application/wasm .wasm
+  AddType application/json .json
+  AddType application/manifest+json .webmanifest
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+  AddType text/xml .xml
+</IfModule>
+
+# 7. Gzip / Brotli 压缩优化
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml application/xml application/xhtml+xml application/rss+xml application/javascript application/x-javascript application/json image/svg+xml
+</IfModule>
+
+# 8. 静态资源缓存控制策略
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 hour"
+
+  # HTML 与 Sitemap 保持高频更新验证
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/xml "access plus 1 hour"
+  ExpiresByType text/xml "access plus 1 hour"
+
+  # Astro 构建带 Hash 的静态资产与图片长效缓存
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/webp "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/svg+xml "access plus 6 months"
+  ExpiresByType application/wasm "access plus 1 month"
+</IfModule>
+
+# 9. 安全响应头（不启用未验证的长期不可逆 HSTS preload，保障安全与部署兼容）
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # 为 _astro 静态哈希资源设置 immutable
+  <FilesMatch "\.(css|js|webp|png|jpg|jpeg|svg|woff2)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # HTML 页面即时协商缓存
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "public, max-age=0, must-revalidate"
+  </FilesMatch>
+</IfModule>

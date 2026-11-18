@@ -1,0 +1,108 @@
+---
+import type { UnifiedContentItem } from '@/utils/content';
+
+export interface Props {
+  item: UnifiedContentItem;
+  variant?: 'vertical' | 'horizontal';
+}
+
+const { item, variant = 'vertical' } = Astro.props;
+---
+
+{
+  variant === 'horizontal' ? (
+    <article class="editorial-card overflow-hidden flex flex-col sm:flex-row group bg-white">
+      <a
+        href={item.url}
+        class="sm:w-52 md:w-60 shrink-0 overflow-hidden bg-slate-100 relative block"
+      >
+        <img
+          src={item.cover}
+          alt={item.coverAlt}
+          loading="lazy"
+          width="600"
+          height="315"
+          class="w-full h-44 sm:h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <span class="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-600 text-white shadow-xs">
+          {item.categoryLabel}
+        </span>
+      </a>
+      <div class="p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 mb-2">
+            <span class="font-mono">{item.updatedDate} 更新</span>
+            <span>&middot;</span>
+            <span>约 {item.readingTimeMinutes} 分钟阅读</span>
+            {item.pillar && (
+              <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-semibold border border-amber-200">
+                Pillar 支柱长文
+              </span>
+            )}
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+            <a href={item.url}>{item.title}</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 mt-2 line-clamp-2 leading-relaxed">
+            {item.excerpt}
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+          <span class="text-slate-500">{item.author}</span>
+          <a href={item.url} class="font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform">
+            阅读全文 &rarr;
+          </a>
+        </div>
+      </div>
+    </article>
+  ) : (
+    <article class="editorial-card overflow-hidden flex flex-col group bg-white h-full">
+      <a href={item.url} class="block relative overflow-hidden bg-slate-100 aspect-[16/9]">
+        <img
+          src={item.cover}
+          alt={item.coverAlt}
+          loading="lazy"
+          width="600"
+          height="315"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div class="absolute top-3 left-3 flex items-center gap-1.5">
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-600 text-white shadow-xs">
+            {item.categoryLabel}
+          </span>
+          {item.pillar && (
+            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-slate-900/90 text-amber-300">
+              核心指南
+            </span>
+          )}
+        </div>
+      </a>
+      <div class="p-5 flex-1 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-xs text-slate-500 mb-2 font-mono">
+            <time datetime={item.updatedDate}>{item.updatedDate}</time>
+            <span>&middot;</span>
+            <span>{item.readingTimeMinutes} 分钟</span>
+          </div>
+          <h3 class="text-[17px] font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+            <a href={item.url}>{item.title}</a>
+          </h3>
+          <p class="text-sm text-slate-600 mt-2.5 line-clamp-3 leading-relaxed">
+            {item.excerpt}
+          </p>
+        </div>
+
+        <div class="mt-4 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
+          <div class="flex flex-wrap gap-1.5">
+            {item.tags.slice(0, 2).map((tag) => (
+              <span class="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">#{tag}</span>
+            ))}
+          </div>
+          <a href={item.url} class="font-bold text-blue-600 shrink-0">
+            详情 &rarr;
+          </a>
+        </div>
+      </div>
+    </article>
+  )
+}

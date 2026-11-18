@@ -1,0 +1,38 @@
+---
+export interface Props {
+  headings: { depth: number; text: string; slug: string }[];
+}
+
+const { headings = [] } = Astro.props;
+const filtered = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  filtered.length > 0 && (
+    <div class="editorial-card p-5 bg-slate-50/70">
+      <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-200">
+        <h2 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+          <svg class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h7" />
+          </svg>
+          <span>文章章节目录</span>
+        </h2>
+        <span class="text-[11px] font-mono text-slate-400">{filtered.length} 节</span>
+      </div>
+      <nav aria-label="文章章节导航">
+        <ul class="space-y-1.5 text-xs sm:text-[13px] max-h-[380px] overflow-y-auto pr-1">
+          {filtered.map((item) => (
+            <li class:list={[item.depth === 3 ? 'pl-3.5 border-l border-slate-200 ml-1' : 'font-semibold']}>
+              <a
+                href={`#${item.slug}`}
+                class="block py-1 text-slate-600 hover:text-blue-600 transition-colors line-clamp-1"
+              >
+                {item.text}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  )
+}

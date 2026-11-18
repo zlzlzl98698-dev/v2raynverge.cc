@@ -1,0 +1,82 @@
+---
+import type { AirportBrand } from '@/data/brands';
+import { SITE_CONFIG } from '@/data/site';
+
+export interface Props {
+  brand: AirportBrand;
+}
+
+const { brand } = Astro.props;
+---
+
+<section class="my-8 editorial-card overflow-hidden bg-white" aria-label={`${brand.name} 套餐价格表`}>
+  <div class="p-5 sm:p-6 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div>
+      <div class="flex items-center gap-2">
+        <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">{brand.name} 套餐价格与流量核实表</h3>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
+          核实日期：{brand.verifiedDate}
+        </span>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-600 mt-1">
+        优惠码：<code class="font-mono font-bold text-blue-600">{brand.couponCode}</code>（{brand.couponDiscount}）
+      </p>
+    </div>
+
+    <a
+      href={brand.affiliateUrl}
+      target="_blank"
+      rel="nofollow sponsored noopener"
+      class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-colors shrink-0"
+    >
+      <span>前往 {brand.name} 官方面板核对实时价格</span>
+      <span>&nearr;</span>
+    </a>
+  </div>
+
+  {
+    brand.historicalDiscrepancyNote && (
+      <div class="px-5 py-3.5 bg-amber-50/90 border-b border-amber-200 text-xs sm:text-sm text-amber-900">
+        {brand.historicalDiscrepancyNote}
+      </div>
+    )
+  }
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse text-sm">
+      <thead>
+        <tr class="bg-slate-100/80 text-slate-700 border-b border-slate-200">
+          <th class="py-3.5 px-4 font-bold">套餐名称</th>
+          <th class="py-3.5 px-4 font-bold">计费周期</th>
+          <th class="py-3.5 px-4 font-bold">标称售价</th>
+          <th class="py-3.5 px-4 font-bold">折算月均 / 单价说明</th>
+          <th class="py-3.5 px-4 font-bold">流量额度</th>
+          <th class="py-3.5 px-4 font-bold">流量重置方式</th>
+          <th class="py-3.5 px-4 font-bold">备注说明</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        {brand.plans.map((plan) => (
+          <tr class="hover:bg-blue-50/30 transition-colors">
+            <td class="py-3.5 px-4 font-bold text-slate-900">{plan.name}</td>
+            <td class="py-3.5 px-4">
+              <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-xs font-semibold">
+                {plan.billingCycle}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 font-mono font-bold text-blue-600">{plan.price}</td>
+            <td class="py-3.5 px-4 text-xs text-slate-600 font-medium">{plan.monthlyEquivalent}</td>
+            <td class="py-3.5 px-4 font-mono font-semibold text-slate-800">{plan.traffic}</td>
+            <td class="py-3.5 px-4 text-xs text-slate-600">{plan.resetCycle}</td>
+            <td class="py-3.5 px-4 text-xs text-slate-500">{plan.notes || '以官网当期说明为准'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="p-4 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <p>* 注意区分“年付折算月均价”与“普通单月付价格”。{SITE_CONFIG.disclosure.affiliateNotice}</p>
+    <p class="font-mono text-slate-400">数据状态：{brand.dataStatusLabel}</p>
+  </div>
+</section>

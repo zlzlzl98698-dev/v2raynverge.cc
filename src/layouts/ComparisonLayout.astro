@@ -1,0 +1,96 @@
+---
+import ArticleLayout from './ArticleLayout.astro';
+import { getBrandsBySlugs } from '@/data/brands';
+
+export interface Props {
+  title: string;
+  seoTitle?: string;
+  description: string;
+  excerpt?: string;
+  pubDate: string;
+  updatedDate: string;
+  category: 'airport' | 'vpn' | 'clash' | 'resources';
+  tags: string[];
+  cover: string;
+  coverAlt?: string;
+  author: string;
+  readingTimeMinutes: number;
+  wordCount?: number;
+  faq?: { question: string; answer: string }[];
+  sources?: { title: string; note: string; date: string }[];
+  relatedBrands?: string[];
+  relatedSlugs?: string[];
+  priceVerifiedDate?: string;
+  testDate?: string;
+  rawBody?: string;
+  currentUrl: string;
+  comparedItems?: string[];
+  comparisonDimension?: string;
+}
+
+const props = Astro.props;
+const matchedBrands = getBrandsBySlugs(props.relatedBrands || []);
+---
+
+<ArticleLayout {...props}>
+  <div class="not-prose my-6 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+    <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200">
+      <div>
+        <span class="text-xs font-bold uppercase text-blue-600">HEAD-TO-HEAD COMPARISON MATRIX</span>
+        <h2 class="text-base sm:text-lg font-extrabold text-slate-900">
+          横向对比维度：{props.comparisonDimension || '架构、延迟、单价与客户端兼容性'}
+        </h2>
+      </div>
+      {
+        props.comparedItems && props.comparedItems.length > 0 && (
+          <div class="flex flex-wrap gap-1.5">
+            {props.comparedItems.map((ci) => (
+              <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-800">
+                {ci}
+              </span>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    {
+      matchedBrands.length > 1 && (
+        <div class="mt-4 overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-white border-b border-slate-200 text-slate-700">
+                <th class="py-2.5 px-3 font-bold">品牌名称</th>
+                <th class="py-2.5 px-3 font-bold">运营年份</th>
+                <th class="py-2.5 px-3 font-bold">线路类型</th>
+                <th class="py-2.5 px-3 font-bold">协议</th>
+                <th class="py-2.5 px-3 font-bold">参考起步成本</th>
+                <th class="py-2.5 px-3 font-bold">客户端方式</th>
+                <th class="py-2.5 px-3 font-bold">档案入口</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 bg-white">
+              {matchedBrands.map((b) => (
+                <tr>
+                  <td class="py-2.5 px-3 font-bold text-slate-900">{b.name}</td>
+                  <td class="py-2.5 px-3 font-mono">{b.foundedYear}</td>
+                  <td class="py-2.5 px-3 text-blue-600 font-semibold">{b.lineType}</td>
+                  <td class="py-2.5 px-3 font-mono">{b.protocols.join('/')}</td>
+                  <td class="py-2.5 px-3 font-semibold">{b.startingPriceLabel}</td>
+                  <td class="py-2.5 px-3">{b.clientSupport}</td>
+                  <td class="py-2.5 px-3">
+                    <a href={`/brands/${b.slug}/`} class="text-blue-600 font-bold hover:underline">
+                      详情 &rarr;
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+  </div>
+
+  <slot />
+</ArticleLayout>

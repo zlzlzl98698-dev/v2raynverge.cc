@@ -1,0 +1,98 @@
+---
+import ArticleLayout from './ArticleLayout.astro';
+import { getBrandBySlug } from '@/data/brands';
+import BrandInfrastructureSnapshot from '@/components/charts/BrandInfrastructureSnapshot.astro';
+import NetworkPerformanceReport from '@/components/charts/NetworkPerformanceReport.astro';
+import StreamingAvailabilityMatrix from '@/components/charts/StreamingAvailabilityMatrix.astro';
+import PricingTable from '@/components/review/PricingTable.astro';
+
+export interface Props {
+  title: string;
+  seoTitle?: string;
+  description: string;
+  excerpt?: string;
+  pubDate: string;
+  updatedDate: string;
+  category: 'airport' | 'vpn' | 'clash' | 'resources';
+  tags: string[];
+  cover: string;
+  coverAlt?: string;
+  author: string;
+  readingTimeMinutes: number;
+  wordCount?: number;
+  faq?: { question: string; answer: string }[];
+  sources?: { title: string; note: string; date: string }[];
+  relatedBrands?: string[];
+  relatedSlugs?: string[];
+  priceVerifiedDate?: string;
+  testDate?: string;
+  rawBody?: string;
+  currentUrl: string;
+  brandSlug?: string;
+  overallRating?: number;
+}
+
+const props = Astro.props;
+const targetBrand = getBrandBySlug(props.brandSlug || props.relatedBrands?.[0] || 'guangsuyun');
+---
+
+<ArticleLayout {...props}>
+  {
+    targetBrand && (
+      <div class="not-prose my-6 p-5 rounded-2xl bg-slate-900 text-white border border-slate-800">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <img
+              src={targetBrand.logo}
+              alt={`${targetBrand.name} Logo`}
+              width="56"
+              height="56"
+              class="w-14 h-14 rounded-xl object-cover border border-slate-700"
+            />
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-blue-600 text-white font-bold">
+                  LAB REVIEW SCORE: {props.overallRating || 9.2} / 10
+                </span>
+                <span class="text-xs font-mono text-emerald-400">{targetBrand.dataStatusLabel}</span>
+              </div>
+              <h2 class="text-lg sm:text-xl font-extrabold text-white mt-1">
+                评测对象：{targetBrand.name} ({targetBrand.lineType})
+              </h2>
+              <p class="text-xs text-slate-300">{targetBrand.shortPositioning}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a
+              href={`/brands/${targetBrand.slug}/`}
+              class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-white transition-colors"
+            >
+              品牌数据库卡片
+            </a>
+            <a
+              href={targetBrand.affiliateUrl}
+              target="_blank"
+              rel="nofollow sponsored noopener"
+              class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white transition-colors"
+            >
+              访问 {targetBrand.name} 官网 &nearr;
+            </a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  <slot />
+
+  {
+    targetBrand && (
+      <div class="not-prose mt-10 space-y-8">
+        <BrandInfrastructureSnapshot brand={targetBrand} />
+        <NetworkPerformanceReport brand={targetBrand} />
+        <StreamingAvailabilityMatrix brand={targetBrand} />
+        <PricingTable brand={targetBrand} />
+      </div>
+    )
+  }
+</ArticleLayout>

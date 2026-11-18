@@ -1,0 +1,32 @@
+---
+import type { UnifiedContentItem } from '@/utils/content';
+
+export interface Props {
+  item: UnifiedContentItem;
+  index?: number;
+}
+
+const { item, index } = Astro.props;
+---
+
+<article class="editorial-card p-4 bg-white group flex items-start gap-3.5">
+  {
+    typeof index === 'number' && (
+      <div class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+        {String(index + 1).padStart(2, '0')}
+      </div>
+    )
+  }
+  <div class="flex-1 min-w-0">
+    <div class="flex items-center gap-2 text-[11px] text-slate-500 mb-1">
+      <span class="font-semibold text-blue-600">{item.categoryLabel}</span>
+      <span>&middot;</span>
+      <span class="font-mono">{item.updatedDate}</span>
+      <span>&middot;</span>
+      <span>{item.readingTimeMinutes} 分钟</span>
+    </div>
+    <h4 class="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+      <a href={item.url}>{item.title}</a>
+    </h4>
+  </div>
+</article>

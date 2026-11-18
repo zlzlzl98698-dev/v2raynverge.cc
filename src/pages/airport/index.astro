@@ -1,0 +1,8 @@
+---
+import CategoryLayout from '@/layouts/CategoryLayout.astro';
+import { getPrimaryCategoryBySlug } from '@/data/navigation';
+
+const category = getPrimaryCategoryBySlug('airport')!;
+---
+
+<CategoryLayout category={category} />

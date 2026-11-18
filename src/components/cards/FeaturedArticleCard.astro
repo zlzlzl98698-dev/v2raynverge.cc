@@ -1,0 +1,63 @@
+---
+import type { UnifiedContentItem } from '@/utils/content';
+
+export interface Props {
+  item: UnifiedContentItem;
+}
+
+const { item } = Astro.props;
+---
+
+<article class="editorial-card overflow-hidden bg-white group flex flex-col h-full border-blue-100">
+  <a href={item.url} class="relative block overflow-hidden bg-slate-100 aspect-[16/9]">
+    <img
+      src={item.cover}
+      alt={item.coverAlt}
+      width="800"
+      height="420"
+      class="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+    />
+    <div class="absolute top-4 left-4 flex items-center gap-2">
+      <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-600 text-white shadow-sm">
+        编辑部重点推荐 · {item.categoryLabel}
+      </span>
+      <span class="px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-slate-900/85 text-white">
+        {item.readingTimeMinutes} min read
+      </span>
+    </div>
+  </a>
+  <div class="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+    <div>
+      <div class="flex flex-wrap items-center gap-2 text-xs text-slate-500 mb-3">
+        <span class="font-semibold text-blue-600">{item.author}</span>
+        <span>&middot;</span>
+        <span>发布于 {item.pubDate}</span>
+        <span>&middot;</span>
+        <span class="text-emerald-700 font-medium">数据核实：{item.updatedDate}</span>
+      </div>
+      <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+        <a href={item.url}>{item.title}</a>
+      </h3>
+      <p class="text-sm sm:text-base text-slate-600 mt-3 leading-relaxed line-clamp-3">
+        {item.excerpt}
+      </p>
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap gap-1.5">
+        {item.tags.slice(0, 4).map((tag) => (
+          <span class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium">
+            #{tag}
+          </span>
+        ))}
+      </div>
+      <a
+        href={item.url}
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white text-sm font-bold transition-colors"
+      >
+        <span>深度阅读</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,47 @@
+---
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items = [] } = Astro.props;
+const fullItems: BreadcrumbItem[] = [
+  { name: '首页', url: '/' },
+  ...items.filter((i) => i.url !== '/'),
+];
+---
+
+<nav aria-label="面包屑导航" class="mb-5">
+  <ol class="flex flex-wrap items-center gap-1.5 text-xs sm:text-sm text-slate-500">
+    {
+      fullItems.map((item, index) => {
+        const isLast = index === fullItems.length - 1;
+        return (
+          <li class="inline-flex items-center gap-1.5">
+            {index > 0 && (
+              <svg class="w-3.5 h-3.5 text-slate-300 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            )}
+            {isLast ? (
+              <span class="font-semibold text-slate-800 line-clamp-1 max-w-[260px] sm:max-w-md" aria-current="page">
+                {item.name}
+              </span>
+            ) : (
+              <a
+                href={item.url}
+                class="hover:text-blue-600 transition-colors"
+              >
+                {item.name}
+              </a>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+</nav>

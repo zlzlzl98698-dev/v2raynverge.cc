@@ -1,0 +1,20 @@
+---
+import TopicLayout from '@/layouts/TopicLayout.astro';
+import { getPrimaryCategoryBySlug, type SecondaryTopic } from '@/data/navigation';
+
+export function getStaticPaths() {
+  const category = getPrimaryCategoryBySlug('airport')!;
+  return category.topics.map((topic) => ({
+    params: { topic: topic.slug },
+    props: { topic },
+  }));
+}
+
+export interface Props {
+  topic: SecondaryTopic;
+}
+
+const { topic } = Astro.props;
+---
+
+<TopicLayout topic={topic} />

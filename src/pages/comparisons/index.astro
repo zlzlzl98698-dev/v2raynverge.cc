@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import ComparisonCard from '@/components/cards/ComparisonCard.astro';
+import { getAllPublishedContent } from '@/utils/content';
+
+const allContent = await getAllPublishedContent();
+const comparisons = allContent.filter((i) => i.collection === 'comparisons');
+---
+
+<BaseLayout
+  title="2026 机场品牌与代理客户端横向对比中心 - v2rayn指南"
+  description="同台对比光速云 vs 暮光加速 vs 飞猫云、IEPL 专线 vs IPLC 专线架构、v2rayN vs Clash Verge Rev vs Hiddify 客户端性能。"
+  breadcrumbs={[{ name: '横向对比', url: '/comparisons/' }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+    <Breadcrumb items={[{ name: '横向对比', url: '/comparisons/' }]} />
+
+    <div class="max-w-3xl mb-8">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600">HEAD-TO-HEAD MATRIX</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+        多品牌与客户端技术横向对比
+      </h1>
+      <p class="text-base text-slate-600 mt-2">
+        通过统一的参数表格与实测基准，直观对比不同品牌套餐、专线架构与开源代理软件的真实差异。
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {comparisons.map((item) => <ComparisonCard item={item} />)}
+    </div>
+  </div>
+</BaseLayout>

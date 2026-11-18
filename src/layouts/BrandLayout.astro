@@ -1,0 +1,278 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import PricingTable from '@/components/review/PricingTable.astro';
+import NetworkPerformanceReport from '@/components/charts/NetworkPerformanceReport.astro';
+import StreamingAvailabilityMatrix from '@/components/charts/StreamingAvailabilityMatrix.astro';
+import NetworkTopology from '@/components/charts/NetworkTopology.astro';
+import BrandInfrastructureSnapshot from '@/components/charts/BrandInfrastructureSnapshot.astro';
+import FAQSection from '@/components/common/FAQSection.astro';
+import BrandCard from '@/components/cards/BrandCard.astro';
+import ArticleCard from '@/components/cards/ArticleCard.astro';
+import type { AirportBrand } from '@/data/brands';
+import { AIRPORT_BRANDS } from '@/data/brands';
+import { SITE_CONFIG } from '@/data/site';
+import { getAllPublishedContent } from '@/utils/content';
+
+export interface Props {
+  brand: AirportBrand;
+}
+
+const { brand } = Astro.props;
+
+const similarBrands = AIRPORT_BRANDS.filter(
+  (b) => b.slug !== brand.slug && (b.lineType === brand.lineType || Math.abs(b.startingMonthlyCost - brand.startingMonthlyCost) <= 6)
+).slice(0, 3);
+
+const allContent = await getAllPublishedContent();
+const relatedContent = allContent
+  .filter((c) => c.relatedBrands.includes(brand.slug) || c.category === 'airport')
+  .slice(0, 3);
+
+const defaultFaq =
+  brand.faq.length > 0
+    ? brand.faq
+    : [
+        {
+          question: `${brand.name} 的起步价格与计费方式是什么？`,
+          answer: `${brand.name} 当前核实的参考起步价格为“${brand.startingPriceLabel}”，优惠码为 ${brand.couponCode}（${brand.couponDiscount}）。请注意区分年付折算月均成本与单月直接付费价格。`,
+        },
+        {
+          question: `${brand.name} 支持 v2rayN、Clash Verge Rev 或 Shadowrocket 吗？`,
+          answer: `${brand.name} 的客户端兼容方式为“${brand.clientSupport}”，适用软件包括：${brand.supportedClients.join('、')}。`,
+        },
+        {
+          question: `${brand.name} 的数据核实状态与风险提示有哪些？`,
+          answer: `当前数据状态为“${brand.dataStatusLabel}”（核实日期：${brand.verifiedDate}）。${brand.riskNotes.join(' ')}`,
+        },
+      ];
+---
+
+<BaseLayout
+  title={`${brand.name} 2026深度评测：套餐价格、${brand.lineType}实测速度与优缺点审计`}
+  description={`${brand.name}（${brand.foundedYear}年运营）完整评测档案：${brand.shortPositioning}。包含最新套餐价格表、优惠码 ${brand.couponCode}、香港/日本/新加坡节点测速、AI与流媒体解锁矩阵及同类对比。`}
+  ogType="article"
+  ogImage={brand.coverImage}
+  pubDate={brand.verifiedDate}
+  updatedDate={brand.updatedDate}
+  breadcrumbs={[
+    { name: '品牌数据库', url: '/brands/' },
+    { name: `${brand.name} 评测档案`, url: `/brands/${brand.slug}/` },
+  ]}
+  faq={defaultFaq}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <Breadcrumb
+      items={[
+        { name: '品牌数据库', url: '/brands/' },
+        { name: `${brand.name} 评测档案`, url: `/brands/${brand.slug}/` },
+      ]}
+    />
+
+    <!-- 1. 品牌顶部核心档案卡 -->
+    <section class="editorial-card p-6 sm:p-8 bg-white mb-10">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-200">
+        <div class="flex items-start sm:items-center gap-4">
+          <img
+            src={brand.logo}
+            alt={`${brand.name} 品牌 Logo`}
+            width="72"
+            height="72"
+            class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl object-cover border border-slate-200 bg-slate-50 shrink-0"
+          />
+          <div>
+            <div class="flex flex-wrap items-center gap-2 mb-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-slate-900 text-white">
+                DATABASE #{String(brand.rank).padStart(2, '0')}
+              </span>
+              {brand.isPrimaryPromoted && (
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white">
+                  本站重点合作推广品牌（独立评测披露）
+                </span>
+              )}
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                {brand.dataStatusLabel}
+              </span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+              {brand.name} ({brand.englishName}) 评测与数据档案
+            </h1>
+            <p class="text-sm text-slate-600 mt-1">{brand.shortPositioning}</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end gap-2.5 shrink-0">
+          <a
+            href={brand.affiliateUrl}
+            target="_blank"
+            rel="nofollow sponsored noopener"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-sm sm:text-base shadow-sm transition-colors"
+          >
+            <span>访问 {brand.name} 官方注册入口</span>
+            <span>&nearr;</span>
+          </a>
+          <span class="text-[11px] text-slate-500 text-center lg:text-right">
+            专属优惠码：<code class="font-mono font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">{brand.couponCode}</code>
+          </span>
+        </div>
+      </div>
+
+      <!-- Answer-First 核心结论与推广合规声明 -->
+      <div class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-8 space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-blue-600">
+            ANSWER-FIRST · 品牌核心评测结论
+          </div>
+          <p class="text-base text-slate-800 leading-relaxed font-medium">
+            {brand.summary}
+          </p>
+          {brand.affiliateUrlNote && (
+            <p class="text-xs text-amber-800 bg-amber-50 border border-amber-200 px-3 py-2 rounded-lg">
+              <strong>链接核实提醒：</strong>{brand.affiliateUrlNote}
+            </p>
+          )}
+        </div>
+
+        <div class="lg:col-span-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1.5">
+          <p class="font-bold text-slate-900">透明评测与商业披露：</p>
+          <p>{SITE_CONFIG.disclosure.affiliateNotice}</p>
+          <p>{SITE_CONFIG.disclosure.editorialIndependence}</p>
+          <p class="font-mono text-[11px] text-slate-500 pt-1">
+            核实日期：{brand.verifiedDate} | 更新日期：{brand.updatedDate}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 基础设施与技术参数快照 (BrandInfrastructureSnapshot) -->
+    <BrandInfrastructureSnapshot brand={brand} />
+
+    <!-- 3. 套餐价格与流量核实表 (PricingTable) -->
+    <PricingTable brand={brand} />
+
+    <!-- 4. 优势、不足、适合人群与注意事项四宫格 -->
+    <section class="my-10 grid grid-cols-1 md:grid-cols-2 gap-6" aria-label="优缺点与适用人群分析">
+      <div class="editorial-card p-6 bg-white border-t-4 border-t-emerald-500">
+        <h2 class="text-lg font-extrabold text-slate-900 mb-3 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span>核心优势与已核实亮点</span>
+        </h2>
+        <ul class="space-y-2.5 text-sm text-slate-700 list-disc pl-5">
+          {brand.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      </div>
+
+      <div class="editorial-card p-6 bg-white border-t-4 border-t-amber-500">
+        <h2 class="text-lg font-extrabold text-slate-900 mb-3 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+          <span>主要限制与选购前注意事项</span>
+        </h2>
+        <ul class="space-y-2.5 text-sm text-slate-700 list-disc pl-5">
+          {brand.limitations.map((l) => <li>{l}</li>)}
+          {brand.riskNotes.map((r) => <li class="text-amber-800 font-medium">{r}</li>)}
+        </ul>
+      </div>
+
+      <div class="editorial-card p-6 bg-white">
+        <h2 class="text-lg font-extrabold text-slate-900 mb-3">适合人群画像</h2>
+        <ul class="space-y-2 text-sm text-slate-700 list-disc pl-5">
+          {brand.suitableFor.map((s) => <li>{s}</li>)}
+        </ul>
+      </div>
+
+      <div class="editorial-card p-6 bg-white">
+        <h2 class="text-lg font-extrabold text-slate-900 mb-3">不适合人群与替代建议</h2>
+        <ul class="space-y-2 text-sm text-slate-700 list-disc pl-5">
+          {brand.notSuitableFor.map((n) => <li>{n}</li>)}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. 专业网络实验室测速图表 (NetworkPerformanceReport) -->
+    <NetworkPerformanceReport brand={brand} />
+
+    <!-- 6. AI 与流媒体解锁矩阵 (StreamingAvailabilityMatrix) -->
+    <StreamingAvailabilityMatrix brand={brand} />
+
+    <!-- 7. 网络连接路径与拓扑说明 (NetworkTopology) -->
+    <NetworkTopology brand={brand} />
+
+    <!-- 8. 客户端支持与配置引导 -->
+    <section class="my-10 editorial-card p-6 bg-white">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
+        <div>
+          <span class="text-xs font-bold uppercase text-blue-600">CLIENT COMPATIBILITY</span>
+          <h2 class="text-xl font-extrabold text-slate-900 mt-0.5">
+            {brand.name} 客户端使用与订阅导入指南
+          </h2>
+        </div>
+        <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700">
+          模式：{brand.clientSupport}
+        </span>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-700">
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+          <h3 class="font-bold text-slate-900 mb-1.5">1. 支持软件清单</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            {brand.supportedClients.join('、')}。协议采用 <code class="font-mono">{brand.protocols.join(' / ')}</code>。
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
+          <h3 class="font-bold text-slate-900 mb-1.5">2. 配置操作要点</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">
+            {
+              brand.clientSupport.includes('仅专属客户端')
+                ? `该品牌采用官方专属客户端模式，不提供第三方订阅链接。请在官网下载对应系统的客户端后直接用账号登录。`
+                : `支持复制通用订阅导入 v2rayN 或 Clash Verge Rev。导入后请开启 Rule（规则分流）模式，避免全局模式额外消耗套餐流量。`
+            }
+          </p>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-slate-900 mb-1.5">3. 配套客户端教程</h3>
+            <p class="text-xs text-slate-600">遇到订阅拉取报错或连接 Timeout 可直接查阅排障手册。</p>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2 text-xs font-bold text-blue-600">
+            <a href="/guides/v2rayn-complete-tutorial-windows/" class="hover:underline">v2rayN教程 &rarr;</a>
+            <a href="/guides/clash-verge-rev-subscription-import-guide/" class="hover:underline">Clash Verge教程 &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <slot />
+
+    <!-- 9. 品牌 FAQ -->
+    <FAQSection
+      title={`${brand.name} 常见问题与售前须知`}
+      items={defaultFaq}
+    />
+
+    <!-- 10. 同类型品牌横向对比推荐 -->
+    <section class="my-12 pt-8 border-t border-slate-200" aria-label="同类型品牌对比">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase text-blue-600">PEER COMPARISON</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-0.5">
+            与 {brand.name} 同价位或同线路类型的替代对比品牌
+          </h2>
+        </div>
+        <a href="/brands/" class="text-sm font-bold text-blue-600 hover:underline">
+          回品牌数据库筛选 &rarr;
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {similarBrands.map((sim) => <BrandCard brand={sim} />)}
+      </div>
+    </section>
+
+    <!-- 11. 关联评测与选型文章 -->
+    <section class="my-10 pt-8 border-t border-slate-200">
+      <h2 class="text-xl font-extrabold text-slate-900 mb-5">关联深度评测与选型文章</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {relatedContent.map((item) => <ArticleCard item={item} />)}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,85 @@
+---
+import type { AirportBrand } from '@/data/brands';
+
+export interface Props {
+  brand: AirportBrand;
+}
+
+const { brand } = Astro.props;
+---
+
+<section
+  class="observatory-panel p-5 sm:p-6 my-8 shadow-lg"
+  aria-label={`${brand.name} 基础设施与服务参数快照`}
+>
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-700/80">
+    <div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <h3 class="text-base sm:text-lg font-extrabold text-white">
+          {brand.name} · Infrastructure Service Snapshot
+        </h3>
+        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800 text-emerald-300 border border-slate-700">
+          VERIFIED: {brand.verifiedDate}
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">
+        数据来源：{brand.sourceNote}
+      </p>
+    </div>
+
+    <div class="text-xs font-mono px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-sky-300">
+      STATUS: {brand.dataStatus.toUpperCase()}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mt-5">
+    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+      <span class="text-[11px] font-mono text-slate-400 block">运营起始年份</span>
+      <span class="text-base font-extrabold text-white font-mono mt-1 block">{brand.foundedYear}</span>
+    </div>
+    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+      <span class="text-[11px] font-mono text-slate-400 block">传输线路架构</span>
+      <span class="text-sm font-bold text-sky-300 mt-1 block">{brand.lineType}</span>
+    </div>
+    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+      <span class="text-[11px] font-mono text-slate-400 block">核心代理协议</span>
+      <span class="text-sm font-bold text-emerald-300 font-mono mt-1 block">{brand.protocols.join(' / ')}</span>
+    </div>
+    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+      <span class="text-[11px] font-mono text-slate-400 block">客户端兼容模式</span>
+      <span class="text-xs font-bold text-white mt-1 block">{brand.clientSupport}</span>
+    </div>
+    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+      <span class="text-[11px] font-mono text-slate-400 block">设备并发策略</span>
+      <span class="text-xs font-bold text-amber-300 mt-1 block">{brand.deviceLimit}</span>
+    </div>
+    <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800">
+      <span class="text-[11px] font-mono text-slate-400 block">折算起步成本</span>
+      <span class="text-sm font-extrabold text-white font-mono mt-1 block">¥{brand.startingMonthlyCost}/月起</span>
+    </div>
+  </div>
+
+  <!-- 节点覆盖与支付方式详情 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+      <h4 class="text-xs font-mono text-sky-400 uppercase mb-2">NODE DISTRIBUTION · 节点覆盖区域 ({brand.nodeCountLabel})</h4>
+      <div class="flex flex-wrap gap-1.5">
+        {brand.nodeRegions.map((reg) => (
+          <span class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-200 text-xs font-medium border border-slate-700">
+            {reg}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+      <h4 class="text-xs font-mono text-emerald-400 uppercase mb-2">SUPPORTED CLIENTS & BILLING · 适用软件与支付</h4>
+      <p class="text-xs text-slate-300">
+        <strong>支持客户端：</strong>{brand.supportedClients.join('、')}
+      </p>
+      <p class="text-xs text-slate-300 mt-1.5">
+        <strong>支付方式：</strong>{brand.paymentMethods.join(' / ')} | <strong>优惠码：</strong><code class="text-amber-300 font-mono">{brand.couponCode}</code>
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,310 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb, { type BreadcrumbItem } from '@/components/navigation/Breadcrumb.astro';
+import TableOfContents from '@/components/common/TableOfContents.astro';
+import FAQSection from '@/components/common/FAQSection.astro';
+import RelatedArticles from '@/components/common/RelatedArticles.astro';
+import BrandRecommendBlock from '@/components/review/BrandRecommendBlock.astro';
+import { getAllPublishedContent, extractHeadingsFromMarkdown } from '@/utils/content';
+import { getBrandsBySlugs } from '@/data/brands';
+import { PRIMARY_CATEGORIES } from '@/data/navigation';
+
+export interface Props {
+  title: string;
+  seoTitle?: string;
+  description: string;
+  excerpt?: string;
+  pubDate: string;
+  updatedDate: string;
+  category: 'airport' | 'vpn' | 'clash' | 'resources';
+  tags: string[];
+  cover: string;
+  coverAlt?: string;
+  author: string;
+  readingTimeMinutes: number;
+  wordCount?: number;
+  faq?: { question: string; answer: string }[];
+  sources?: { title: string; note: string; date: string }[];
+  relatedBrands?: string[];
+  relatedSlugs?: string[];
+  priceVerifiedDate?: string;
+  testDate?: string;
+  rawBody?: string;
+  currentUrl: string;
+}
+
+const {
+  title,
+  seoTitle,
+  description,
+  excerpt,
+  pubDate,
+  updatedDate,
+  category,
+  tags = [],
+  cover,
+  coverAlt = title,
+  author,
+  readingTimeMinutes,
+  wordCount = 5200,
+  faq = [],
+  sources = [],
+  relatedBrands = ['guangsuyun', 'muguang', 'feimao'],
+  relatedSlugs = [],
+  priceVerifiedDate = '2026-10-19',
+  testDate = '2026-10-19',
+  rawBody = '',
+  currentUrl,
+} = Astro.props;
+
+const catObj = PRIMARY_CATEGORIES.find((c) => c.id === category) || PRIMARY_CATEGORIES[0];
+const breadcrumbs: BreadcrumbItem[] = [
+  { name: catObj.name, url: catObj.url },
+  { name: title, url: currentUrl },
+];
+
+const headings = extractHeadingsFromMarkdown(rawBody);
+const allContent = await getAllPublishedContent();
+
+const relatedItems = allContent
+  .filter((item) => item.url !== currentUrl)
+  .sort((a, b) => {
+    const aExplicit = relatedSlugs.includes(a.slug) ? 2 : 0;
+    const bExplicit = relatedSlugs.includes(b.slug) ? 2 : 0;
+    const aSameCat = a.category === category ? 1 : 0;
+    const bSameCat = b.category === category ? 1 : 0;
+    return bExplicit + bSameCat - (aExplicit + aSameCat);
+  })
+  .slice(0, 6);
+
+const sidebarBrands = getBrandsBySlugs(relatedBrands.length > 0 ? relatedBrands : ['guangsuyun', 'muguang', 'feimao']);
+---
+
+<BaseLayout
+  title={seoTitle || title}
+  description={description}
+  ogType="article"
+  ogImage={cover}
+  pubDate={pubDate}
+  updatedDate={updatedDate}
+  author={author}
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- 1. 面包屑 -->
+    <Breadcrumb items={breadcrumbs} />
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+      <!-- 左侧文章主体 -->
+      <article class="lg:col-span-8 min-w-0">
+        <!-- 2. 分类标签与核实元信息 -->
+        <div class="flex flex-wrap items-center gap-2 mb-4">
+          <a
+            href={catObj.url}
+            class="px-3 py-1 rounded-full text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+          >
+            {catObj.name}
+          </a>
+          <span class="px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+            价格与实测核实：{priceVerifiedDate}
+          </span>
+          {tags.slice(0, 4).map((tag) => (
+            <a
+              href={`/articles/?tag=${encodeURIComponent(tag)}`}
+              class="px-2.5 py-1 rounded-full text-xs bg-slate-100 hover:bg-blue-50 text-slate-600 hover:text-blue-600 transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+
+        <!-- 3. H1 标题 -->
+        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight tracking-tight">
+          {title}
+        </h1>
+
+        <!-- 4. 文章摘要 (Answer-First 核心导读框) -->
+        <div class="mt-5 p-5 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-slate-800">
+          <div class="text-xs font-bold uppercase tracking-wider text-blue-600 mb-1.5">
+            ANSWER-FIRST · 核心结论与导读摘要
+          </div>
+          <p class="text-sm sm:text-[15px] leading-relaxed font-medium">
+            {excerpt || description}
+          </p>
+        </div>
+
+        <!-- 5. 作者及日期 -->
+        <div class="mt-5 py-3.5 px-4 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+          <div class="flex flex-wrap items-center gap-3">
+            <span>作者：<strong class="text-slate-900">{author}</strong></span>
+            <span>&middot;</span>
+            <span>首次发布：<time datetime={pubDate} class="font-mono">{pubDate}</time></span>
+            <span>&middot;</span>
+            <span>最近更新：<time datetime={updatedDate} class="font-mono text-blue-600 font-bold">{updatedDate}</time></span>
+          </div>
+          <div class="font-mono text-slate-500">
+            约 {wordCount} 字 &middot; 预计阅读 {readingTimeMinutes} 分钟
+          </div>
+        </div>
+
+        <!-- 6. 文章封面 -->
+        <figure class="my-6 rounded-2xl overflow-hidden border border-slate-200 shadow-xs bg-slate-50">
+          <img
+            src={cover}
+            alt={coverAlt}
+            width="1200"
+            height="630"
+            class="w-full h-auto object-cover"
+          />
+        </figure>
+
+        <!-- 7. 移动端可折叠阅读目录 -->
+        {
+          headings.length > 0 && (
+            <details class="lg:hidden my-6 editorial-card p-4 bg-slate-50">
+              <summary class="font-bold text-slate-900 text-sm cursor-pointer flex items-center justify-between">
+                <span>展开本文目录 ({headings.length} 节)</span>
+                <span class="text-xs text-blue-600">点击展开 &darr;</span>
+              </summary>
+              <ul class="mt-3 pt-3 border-t border-slate-200 space-y-1.5 text-xs">
+                {headings.map((h) => (
+                  <li class:list={[h.depth === 3 ? 'pl-3 text-slate-500' : 'font-semibold text-slate-800']}>
+                    <a href={`#${h.slug}`} class="hover:text-blue-600 block py-0.5">{h.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )
+        }
+
+        <!-- 8 & 9. 正文内容及内嵌组件 -->
+        <div class="prose-editorial mt-6">
+          <slot />
+        </div>
+
+        <!-- 10. FAQ 问答模块 -->
+        <FAQSection items={faq} />
+
+        <!-- 11. 内容来源与核实记录 -->
+        <section class="my-8 p-5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-2">
+          <h2 class="text-sm font-bold text-slate-900">资料来源与数据核实说明</h2>
+          {
+            sources.length > 0 ? (
+              <ul class="list-disc pl-5 space-y-1">
+                {sources.map((src) => (
+                  <li>
+                    <strong>{src.title}</strong>：{src.note}（记录日期：<span class="font-mono">{src.date}</span>）
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>
+                本文品牌价格、协议类型与测速数据核实自本站《31家独立去重机场品牌数据库》（基准测试日期：{testDate}，最后修订：{updatedDate}）及各开源客户端 GitHub 官方仓库文档。
+              </p>
+            )
+          }
+        </section>
+
+        <!-- 14. 合理的品牌转化入口 -->
+        <BrandRecommendBlock brandSlugs={relatedBrands} />
+
+        <!-- 13. 下一步阅读建议 -->
+        <div class="my-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {
+            relatedItems.slice(0, 2).map((nextItem, idx) => (
+              <a
+                href={nextItem.url}
+                class="editorial-card p-4 bg-white hover:border-blue-400 block group"
+              >
+                <span class="text-[11px] font-bold uppercase text-blue-600">
+                  {idx === 0 ? '&larr; 上一篇延伸阅读' : '下一篇推荐阅读 &rarr;'}
+                </span>
+                <p class="text-sm font-bold text-slate-900 group-hover:text-blue-600 mt-1 line-clamp-2">
+                  {nextItem.title}
+                </p>
+              </a>
+            ))
+          }
+        </div>
+
+        <!-- 12. 相关文章网格 -->
+        <RelatedArticles items={relatedItems} />
+      </article>
+
+      <!-- 右侧桌面端固定边栏：目录 + 关联品牌档案 + 专题快捷导航 -->
+      <aside class="lg:col-span-4 space-y-6 lg:sticky lg:top-20" data-pagefind-ignore>
+        <TableOfContents headings={headings} />
+
+        <!-- 边栏关联品牌速查卡 -->
+        <div class="editorial-card p-5 bg-white">
+          <div class="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-100">
+            <h3 class="text-sm font-bold text-slate-900">本文关联品牌档案</h3>
+            <a href="/brands/" class="text-xs font-semibold text-blue-600 hover:underline">全部 31 家 &rarr;</a>
+          </div>
+          <div class="space-y-3">
+            {
+              sidebarBrands.slice(0, 4).map((brand) => (
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between gap-2">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <a href={`/brands/${brand.slug}/`} class="text-sm font-bold text-slate-900 hover:text-blue-600 truncate">
+                        {brand.name}
+                      </a>
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold shrink-0">
+                        {brand.lineType}
+                      </span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 truncate mt-0.5">{brand.startingPriceLabel}</p>
+                  </div>
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <a
+                      href={`/brands/${brand.slug}/`}
+                      class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-700 hover:text-blue-600"
+                    >
+                      档案
+                    </a>
+                    <a
+                      href={brand.affiliateUrl}
+                      target="_blank"
+                      rel="nofollow sponsored noopener"
+                      class="px-2.5 py-1 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700"
+                    >
+                      官网 &nearr;
+                    </a>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <p class="text-[11px] text-slate-400 mt-3 leading-tight">
+            * 含推广链接，通过链接注册可能为本站带来佣金，不影响用户支付价格。
+          </p>
+        </div>
+
+        <!-- 边栏专题导航与排障直达 -->
+        <div class="editorial-card p-5 bg-slate-900 text-white">
+          <span class="text-[11px] font-mono text-blue-400 uppercase">QUICK DIAGNOSTICS</span>
+          <h3 class="text-base font-extrabold mt-1">遇到订阅或连接故障？</h3>
+          <p class="text-xs text-slate-300 mt-1.5 leading-relaxed">
+            无论是节点全部 Timeout、YAML 格式报错还是关闭软件后浏览器无法上网，均可按五步急救法排查。
+          </p>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs font-semibold">
+            <a href="/guides/v2rayn-complete-tutorial-windows/" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-blue-600 text-center transition-colors">
+              v2rayN 完整教程
+            </a>
+            <a href="/guides/clash-verge-rev-subscription-import-guide/" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-blue-600 text-center transition-colors">
+              Clash Verge 订阅
+            </a>
+            <a href="/guides/clash-troubleshooting-connection-timeout/" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-blue-600 text-center transition-colors">
+              Timeout 超时修复
+            </a>
+            <a href="/resources/runaway-warning/" class="py-2 px-3 rounded-lg bg-slate-800 hover:bg-blue-600 text-center transition-colors">
+              防跑路预警指南
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

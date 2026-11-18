@@ -1,0 +1,225 @@
+---
+import { SITE_CONFIG } from '@/data/site';
+
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogType?: 'website' | 'article';
+  ogImage?: string;
+  pubDate?: string;
+  updatedDate?: string;
+  author?: string;
+  breadcrumbs?: BreadcrumbItem[];
+  faq?: { question: string; answer: string }[];
+  itemList?: { name: string; url: string; position?: number }[];
+  softwareApp?: {
+    name: string;
+    operatingSystem: string;
+    applicationCategory: string;
+    price?: string;
+  };
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogType = 'website',
+  ogImage = '/images/covers/default-editorial.svg',
+  pubDate,
+  updatedDate = SITE_CONFIG.updatedDate,
+  author = SITE_CONFIG.defaultAuthor,
+  breadcrumbs = [],
+  faq = [],
+  itemList = [],
+  softwareApp,
+  noindex = false,
+} = Astro.props;
+
+const rawPathname = Astro.url.pathname;
+const normalizedPath = rawPathname.endsWith('/') ? rawPathname : `${rawPathname}/`;
+const canonicalUrl = canonical || new URL(normalizedPath, SITE_CONFIG.siteUrl).toString();
+const fullOgImage = ogImage.startsWith('http')
+  ? ogImage
+  : new URL(ogImage, SITE_CONFIG.siteUrl).toString();
+
+const finalTitle = title.includes(SITE_CONFIG.brandName)
+  ? title
+  : `${title} | ${SITE_CONFIG.brandName} (${SITE_CONFIG.domain})`;
+
+const schemas: Record<string, any>[] = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${SITE_CONFIG.siteUrl}/#organization`,
+    name: SITE_CONFIG.brandName,
+    url: `${SITE_CONFIG.siteUrl}/`,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_CONFIG.siteUrl}/favicon.svg`,
+    },
+    description: SITE_CONFIG.description,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      email: SITE_CONFIG.contactEmail,
+      contactType: 'editorial support',
+      availableLanguage: ['zh-CN'],
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_CONFIG.siteUrl}/#website`,
+    url: `${SITE_CONFIG.siteUrl}/`,
+    name: SITE_CONFIG.brandName,
+    description: SITE_CONFIG.description,
+    inLanguage: 'zh-CN',
+    publisher: {
+      '@id': `${SITE_CONFIG.siteUrl}/#organization`,
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${SITE_CONFIG.siteUrl}/search/?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  },
+];
+
+if (breadcrumbs.length > 0) {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((item, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      name: item.name,
+      item: item.url.startsWith('http')
+        ? item.url
+        : new URL(item.url.endsWith('/') ? item.url : `${item.url}/`, SITE_CONFIG.siteUrl).toString(),
+    })),
+  });
+}
+
+if (ogType === 'article') {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    image: [fullOgImage],
+    datePublished: pubDate || '2026-10-19',
+    dateModified: updatedDate,
+    inLanguage: 'zh-CN',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+    author: {
+      '@type': 'Organization',
+      name: author,
+      url: `${SITE_CONFIG.siteUrl}/`,
+    },
+    publisher: {
+      '@id': `${SITE_CONFIG.siteUrl}/#organization`,
+    },
+  });
+}
+
+if (itemList.length > 0) {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: title,
+    numberOfItems: itemList.length,
+    itemListElement: itemList.map((item, idx) => ({
+      '@type': 'ListItem',
+      position: item.position ?? idx + 1,
+      name: item.name,
+      url: item.url.startsWith('http')
+        ? item.url
+        : new URL(item.url.endsWith('/') ? item.url : `${item.url}/`, SITE_CONFIG.siteUrl).toString(),
+    })),
+  });
+}
+
+if (softwareApp) {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: softwareApp.name,
+    operatingSystem: softwareApp.operatingSystem,
+    applicationCategory: softwareApp.applicationCategory,
+    offers: {
+      '@type': 'Offer',
+      price: softwareApp.price || '0',
+      priceCurrency: 'CNY',
+    },
+  });
+}
+
+if (faq && faq.length > 0) {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: f.answer,
+      },
+    })),
+  });
+}
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{finalTitle}</title>
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+<link rel="canonical" href={canonicalUrl} />
+<link rel="icon" type="image/png" href="/favicon.png?v=2" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+<link rel="icon" href="/favicon.ico?v=2" />
+<link rel="apple-touch-icon" href="/favicon.png?v=2" />
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+<link rel="sitemap" type="application/xml" title="Sitemap Index" href="/sitemap-index.xml" />
+
+<!-- 搜索引擎站长平台所有权验证预留 (在 src/data/site.ts 或环境变量中配置) -->
+{SITE_CONFIG.verifications.google && <meta name="google-site-verification" content={SITE_CONFIG.verifications.google} />}
+{SITE_CONFIG.verifications.bing && <meta name="msvalidate.01" content={SITE_CONFIG.verifications.bing} />}
+{SITE_CONFIG.verifications.baidu && <meta name="baidu-site-verification" content={SITE_CONFIG.verifications.baidu} />}
+{SITE_CONFIG.verifications.shenma && <meta name="shenma-site-verification" content={SITE_CONFIG.verifications.shenma} />}
+
+<!-- Open Graph -->
+<meta property="og:locale" content={SITE_CONFIG.locale} />
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={SITE_CONFIG.brandName} />
+<meta property="og:title" content={finalTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={fullOgImage} />
+{pubDate && <meta property="article:published_time" content={pubDate} />}
+{updatedDate && <meta property="article:modified_time" content={updatedDate} />}
+
+<!-- Twitter / X Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={finalTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={fullOgImage} />
+
+<!-- JSON-LD Structured Data -->
+{
+  schemas.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))
+}

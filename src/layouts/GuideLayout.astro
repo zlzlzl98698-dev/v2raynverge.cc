@@ -1,0 +1,56 @@
+---
+import ArticleLayout from './ArticleLayout.astro';
+
+export interface Props {
+  title: string;
+  seoTitle?: string;
+  description: string;
+  excerpt?: string;
+  pubDate: string;
+  updatedDate: string;
+  category: 'airport' | 'vpn' | 'clash' | 'resources';
+  tags: string[];
+  cover: string;
+  coverAlt?: string;
+  author: string;
+  readingTimeMinutes: number;
+  wordCount?: number;
+  faq?: { question: string; answer: string }[];
+  sources?: { title: string; note: string; date: string }[];
+  relatedBrands?: string[];
+  relatedSlugs?: string[];
+  priceVerifiedDate?: string;
+  testDate?: string;
+  rawBody?: string;
+  currentUrl: string;
+  osPlatform?: string;
+  clientName?: string;
+  difficulty?: string;
+}
+
+const props = Astro.props;
+---
+
+<ArticleLayout {...props}>
+  <div class="not-prose my-6 p-5 rounded-2xl bg-slate-900 text-white border border-slate-800">
+    <div class="text-xs font-mono text-blue-400 uppercase mb-2">
+      STEP-BY-STEP TECHNICAL PLAYBOOK · 客户端实操环境元数据
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm">
+      <div class="p-3 rounded-xl bg-slate-800/90 border border-slate-700">
+        <span class="text-slate-400 block text-xs">适用操作系统</span>
+        <strong class="text-white mt-0.5 block">{props.osPlatform || 'Windows / macOS / Android / iOS'}</strong>
+      </div>
+      <div class="p-3 rounded-xl bg-slate-800/90 border border-slate-700">
+        <span class="text-slate-400 block text-xs">核心客户端与内核</span>
+        <strong class="text-emerald-300 font-mono mt-0.5 block">{props.clientName || 'v2rayN / Clash Verge Rev'}</strong>
+      </div>
+      <div class="p-3 rounded-xl bg-slate-800/90 border border-slate-700">
+        <span class="text-slate-400 block text-xs">上手难度与预计耗时</span>
+        <strong class="text-amber-300 mt-0.5 block">{props.difficulty || '新手友好 · 约 5–10 分钟完成'}</strong>
+      </div>
+    </div>
+  </div>
+
+  <slot />
+</ArticleLayout>

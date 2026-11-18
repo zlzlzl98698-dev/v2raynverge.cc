@@ -1,0 +1,49 @@
+页面类型,页面名称,目标URL,主关键词,次级关键词,搜索意图,用户决策阶段,所属主题集群,上游入口页面,下游转化页面,关键词边界说明
+二级专题,机场推荐,/airport/recommend/,2026 机场推荐,"机场推荐;2026机场推荐;recommend",商业调查,对比选型阶段,主力全能型专线机场选型集群,/airport/,/brands/,聚焦机场推荐垂直意图不与同级专题互抢
+二级专题,机场排行,/airport/ranking/,机场排行,"机场推荐;2026机场排行;ranking",商业调查,对比选型阶段,五维量化评分与非晚高峰/晚高峰测速榜集群,/airport/,/brands/,聚焦机场排行垂直意图不与同级专题互抢
+二级专题,性价比机场,/airport/value/,性价比机场,"机场推荐;2026性价比机场;value",商业调查,对比选型阶段,10-25元主力月付档每GB单价精算集群,/airport/,/brands/,聚焦性价比机场垂直意图不与同级专题互抢
+二级专题,稳定机场,/airport/stable/,稳定机场,"机场推荐;2026稳定机场;stable",商业调查,对比选型阶段,IEPL/IPLC 物理专线与晚高峰抗抖动集群,/airport/,/brands/,聚焦稳定机场垂直意图不与同级专题互抢
+二级专题,便宜机场,/airport/cheap/,便宜机场,"机场推荐;2026便宜机场;cheap",交易决策,对比选型阶段,5.6元至8元极限平价年付小包评测集群,/airport/,/brands/,聚焦便宜机场垂直意图不与同级专题互抢
+二级专题,免费梯子,/airport/free-ladder/,免费梯子,"机场推荐;2026免费梯子;free-ladder",信息获取,对比选型阶段,免费梯子隐私风险与中间人攻击剖析集群,/airport/,/brands/,聚焦免费梯子垂直意图不与同级专题互抢
+二级专题,科学上网,/airport/scientific-internet/,科学上网,"机场推荐;2026科学上网;scientific-internet",信息获取,对比选型阶段,现代代理协议演进（VLESS/Trojan/Hysteria2）集群,/airport/,/brands/,聚焦科学上网垂直意图不与同级专题互抢
+二级专题,VPN 推荐,/vpn/recommend/,VPN 推荐,"VPN 与加速器;2026VPN 推荐;recommend",商业调查,对比选型阶段,大陆网络环境下 VPN 与专线机场连通率对比集群,/vpn/,/brands/,聚焦VPN 推荐垂直意图不与同级专题互抢
+二级专题,免费 VPN,/vpn/free/,免费 VPN,"VPN 与加速器;2026免费 VPN;free",信息获取,对比选型阶段,免费 VPN 商业变现黑产与山寨软件识别集群,/vpn/,/brands/,聚焦免费 VPN垂直意图不与同级专题互抢
+二级专题,手机 VPN,/vpn/mobile/,手机 VPN,"VPN 与加速器;2026手机 VPN;mobile",商业调查,对比选型阶段,iOS (iPhone/iPad) 小火箭与规则代理客户端集群,/vpn/,/brands/,聚焦手机 VPN垂直意图不与同级专题互抢
+二级专题,VPN 软件评测,/vpn/reviews/,VPN 软件评测,"VPN 与加速器;2026VPN 软件评测;reviews",商业调查,对比选型阶段,机场专属一键客户端与通用订阅客户端对比集群,/vpn/,/brands/,聚焦VPN 软件评测垂直意图不与同级专题互抢
+二级专题,VPN 加速器,/vpn/accelerator/,VPN 加速器,"VPN 与加速器;2026VPN 加速器;accelerator",商业调查,对比选型阶段,亚太超低延迟节点（港/台/新/日）加速实测集群,/vpn/,/brands/,聚焦VPN 加速器垂直意图不与同级专题互抢
+二级专题,加速器对比,/vpn/comparison/,加速器对比,"VPN 与加速器;2026加速器对比;comparison",商业调查,对比选型阶段,游戏加速器、传统 VPN 与专线机场三维对比集群,/vpn/,/brands/,聚焦加速器对比垂直意图不与同级专题互抢
+二级专题,好用的 VPN,/vpn/best/,好用的 VPN,"VPN 与加速器;2026好用的 VPN;best",交易决策,对比选型阶段,零配置一键登录体验最佳方案集群,/vpn/,/brands/,聚焦好用的 VPN垂直意图不与同级专题互抢
+二级专题,Clash 推荐,/clash/recommend/,Clash 推荐,"Clash 客户端;2026Clash 推荐;recommend",信息获取,对比选型阶段,六大操作系统（Win/Mac/安卓/iOS/Linux/软路由）客户端全景集群,/clash/,/brands/,聚焦Clash 推荐垂直意图不与同级专题互抢
+二级专题,Clash Verge,/clash/verge/,Clash Verge,"Clash 客户端;2026Clash Verge;verge",信息获取,对比选型阶段,Clash Verge Rev 核心架构与 Tauri 性能优势集群,/clash/,/brands/,聚焦Clash Verge垂直意图不与同级专题互抢
+二级专题,Clash Verge 下载,/clash/verge-download/,Clash Verge 下载,"Clash 客户端;2026Clash Verge 下载;verge-download",交易决策,对比选型阶段,Windows / macOS (Intel & Apple Silicon) / Linux 安装包架构对照集群,/clash/,/brands/,聚焦Clash Verge 下载垂直意图不与同级专题互抢
+二级专题,Clash Verge 订阅,/clash/verge-subscription/,Clash Verge 订阅,"Clash 客户端;2026Clash Verge 订阅;verge-subscription",信息获取,对比选型阶段,Clash Verge Rev 与 v2rayN 订阅导入及定时更新集群,/clash/,/brands/,聚焦Clash Verge 订阅垂直意图不与同级专题互抢
+二级专题,Clash Meta,/clash/meta/,Clash Meta,"Clash 客户端;2026Clash Meta;meta",信息获取,对比选型阶段,Mihomo (Clash Meta) 内核特性与 VLESS/Hysteria2 协议适配集群,/clash/,/brands/,聚焦Clash Meta垂直意图不与同级专题互抢
+二级专题,Clash 使用教程,/clash/tutorial/,Clash 使用教程,"Clash 客户端;2026Clash 使用教程;tutorial",信息获取,对比选型阶段,v2rayN 与 Clash Verge Rev 从安装到日常分流标准教程集群,/clash/,/brands/,聚焦Clash 使用教程垂直意图不与同级专题互抢
+二级专题,Clash 故障排查,/clash/troubleshooting/,Clash 故障排查,"Clash 客户端;2026Clash 故障排查;troubleshooting",故障解决,对比选型阶段,节点全部超时（Timeout）与 TLS 握手失败诊断集群,/clash/,/brands/,聚焦Clash 故障排查垂直意图不与同级专题互抢
+二级专题,免费节点,/resources/free-nodes/,免费节点,"资源与情报;2026免费节点;free-nodes",信息获取,对比选型阶段,公开爬虫免费节点池原理与存活率实测集群,/resources/,/brands/,聚焦免费节点垂直意图不与同级专题互抢
+二级专题,跑路预警,/resources/runaway-warning/,跑路预警,"资源与情报;2026跑路预警;runaway-warning",信息获取,对比选型阶段,机场跑路前 8 大高危信号与促销陷阱识别集群,/resources/,/brands/,聚焦跑路预警垂直意图不与同级专题互抢
+二级专题,机场 FAQ,/resources/faq/,机场 FAQ,"资源与情报;2026机场 FAQ;faq",信息获取,对比选型阶段,机场核心术语（IEPL/IPLC/BGP/倍率/原生IP）百科集群,/resources/,/brands/,聚焦机场 FAQ垂直意图不与同级专题互抢
+二级专题,机场风险情报,/resources/risk-intelligence/,机场风险情报,"资源与情报;2026机场风险情报;risk-intelligence",商业调查,对比选型阶段,31 家机场品牌数据完整度与同质化规格审计集群,/resources/,/brands/,聚焦机场风险情报垂直意图不与同级专题互抢
+二级专题,节点检测,/resources/node-check/,节点检测,"资源与情报;2026节点检测;node-check",信息获取,对比选型阶段,延迟（Ping vs HTTP URL-Test）与晚高峰带宽实测方法集群,/resources/,/brands/,聚焦节点检测垂直意图不与同级专题互抢
+二级专题,订阅问题,/resources/subscription-issues/,订阅问题,"资源与情报;2026订阅问题;subscription-issues",故障解决,对比选型阶段,订阅拉取失败（403 / Timeout / Network Error）排障集群,/resources/,/brands/,聚焦订阅问题垂直意图不与同级专题互抢
+二级专题,新手帮助,/resources/beginner-help/,新手帮助,"资源与情报;2026新手帮助;beginner-help",信息获取,对比选型阶段,15 分钟从零上手：选套餐、装客户端与首次连接集群,/resources/,/brands/,聚焦新手帮助垂直意图不与同级专题互抢
+已发布文章,2026 机场推荐与专线选型全景指南：基于 31 家独立品牌实测与价格审计,/articles/2026-airport-recommendation-guide/,2026 机场推荐,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 机场排行榜与五维量化评测标准：香港/新加坡/日本实测延迟与带宽解析,/articles/airport-ranking-methodology-2026/,机场排行,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 高性价比机场与不限时流量包精算指南：每 GB 专线成本对比,/articles/best-value-airport-pricing-analysis/,性价比机场,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 稳定机场深度解析：IEPL 与 IPLC 企业级专线架构如何消除晚高峰断流,/articles/enterprise-stable-iepl-iplc-airports/,稳定机场,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 便宜机场推荐与 5.6 元档深度审计：10 元以内能买到什么专线？,/articles/budget-cheap-airports-under-10-yuan/,便宜机场,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 免费梯子与公开免费节点池安全真相：从流量嗅探到低成本合规替代,/articles/free-ladder-nodes-security-truth/,免费梯子,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 科学上网技术架构与协议演进全景指南：从 VLESS、Trojan 到 Hysteria 2,/articles/scientific-internet-architecture-2026/,科学上网,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 传统商业 VPN 与专线机场深度对比：连通率、分流粒度与一键客户端选型,/articles/vpn-vs-airport-proxy-complete-guide/,VPN 推荐,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 第三方代理客户端全景知识库：Windows / Android / iOS / macOS / Linux / 软路由 20+ 工具选型,/articles/clash-clients-ecosystem-overview-2026/,Clash 推荐,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 机场跑路预警与风险控制指南：识别 8 大停服前兆与主备双订阅架构,/articles/airport-runaway-warning-and-risk-prevention/,跑路预警,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,光速云 2026 深度评测：2020老牌 IEPL+企业内网双线实测、套餐价格核实与客户端教程,/reviews/guangsuyun-in-depth-review/,光速云评测,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,暮光加速、飞猫云与微风网络深度评测：2023成熟期三强怎么选？,/reviews/muguang-feimao-weifeng-review-analysis/,暮光加速与飞猫云评测,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,星岛梦、一翻云与 Firefly 萤火虫深度评测：IEPL 与 IPLC 高端专线三剑客解析,/reviews/xingdaomeng-yifan-firefly-dedicated-line-review/,星岛梦与一翻云评测,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 v2rayN 完整安装与配置教程：Windows / macOS / Linux 从下载、订阅导入到 TUN 模式全图解,/guides/v2rayn-complete-tutorial-windows/,v2rayN 教程,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 Clash Verge Rev 下载、安装与订阅导入完整教程：Service Mode 与 TUN 模式配置,/guides/clash-verge-rev-subscription-import-guide/,Clash Verge 订阅,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 Clash Meta (Mihomo) 内核进阶配置指南：Fake-IP 防 DNS 污染、Sniffer 嗅探与覆写规则,/guides/clash-meta-mihomo-core-configuration/,Clash Meta,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 节点全部 Timeout 超时、订阅更新失败与关闭软件后断网急救手册,/guides/clash-troubleshooting-connection-timeout/,节点超时,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 光速云 vs 暮光加速 vs 飞猫云深度对比：老牌双线、BGP 多设备与免配置新手款怎么选？,/comparisons/guangsuyun-vs-muguang-vs-feimao/,光速云和飞猫云哪个好,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 IEPL 专线 vs IPLC 专线 vs BGP 中转深度对比：过墙原理、延迟与价格真相,/comparisons/iepl-vs-iplc-airport-architecture-comparison/,IEPL 和 IPLC 区别,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射
+已发布文章,2026 v2rayN vs Clash Verge Rev vs Hiddify 深度横评：三大开源代理客户端谁更适合你？,/comparisons/v2rayn-vs-clash-verge-rev-vs-hiddify/,v2rayN 和 Clash Verge 哪个好,"v2rayn指南;2026实测;专线评测",信息获取与商业调查,深度评估阶段,核心支柱集群,/airport/,/reviews/guangsuyun-in-depth-review/,独立长尾与支柱词映射

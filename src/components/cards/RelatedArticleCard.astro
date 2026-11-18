@@ -1,0 +1,28 @@
+---
+import type { UnifiedContentItem } from '@/utils/content';
+
+export interface Props {
+  item: UnifiedContentItem;
+}
+
+const { item } = Astro.props;
+---
+
+<article class="editorial-card p-4 bg-white group flex flex-col justify-between h-full">
+  <div>
+    <div class="flex items-center justify-between text-[11px] text-slate-500 mb-1.5">
+      <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-600 font-bold">{item.categoryLabel}</span>
+      <span class="font-mono">{item.updatedDate}</span>
+    </div>
+    <h3 class="text-sm sm:text-[15px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+      <a href={item.url}>{item.title}</a>
+    </h3>
+    <p class="text-xs text-slate-500 mt-1.5 line-clamp-2">
+      {item.excerpt}
+    </p>
+  </div>
+  <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+    <span class="text-slate-400">{item.readingTimeMinutes} 分钟阅读</span>
+    <a href={item.url} class="font-semibold text-blue-600">阅读 &rarr;</a>
+  </div>
+</article>

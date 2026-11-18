@@ -1,0 +1,23 @@
+# Build output
+dist/
+
+# Dependencies
+node_modules/
+
+# Astro & Vite cache
+.astro/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Temporary and Scratch files
+scratch/
+*.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

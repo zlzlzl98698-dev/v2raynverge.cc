@@ -1,0 +1,45 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import ReviewCard from '@/components/cards/ReviewCard.astro';
+import BrandCard from '@/components/cards/BrandCard.astro';
+import { getAllPublishedContent } from '@/utils/content';
+import { TOP_RECOMMENDED_BRANDS } from '@/data/brands';
+
+const allContent = await getAllPublishedContent();
+const reviews = allContent.filter((i) => i.collection === 'reviews');
+---
+
+<BaseLayout
+  title="2026 机场品牌深度评测报告中心 - v2rayn指南"
+  description="汇总光速云、暮光加速、飞猫云、微风网络、星岛梦、一翻云、Firefly 等核心机场品牌的深度评测、五地测速、套餐单价与 AI/流媒体解锁报告。"
+  breadcrumbs={[{ name: '深度评测', url: '/reviews/' }]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12 space-y-12">
+    <Breadcrumb items={[{ name: '深度评测', url: '/reviews/' }]} />
+
+    <div class="max-w-3xl">
+      <span class="text-xs font-bold uppercase tracking-wider text-blue-600">IN-DEPTH BRAND REVIEWS</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">
+        2026 核心机场品牌深度评测报告
+      </h1>
+      <p class="text-base text-slate-600 mt-2">
+        每篇深度评测均集成专业网络实验室图表（NetworkPerformanceReport、StreamingAvailabilityMatrix）与真实核实的价格表。
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {reviews.map((item) => <ReviewCard item={item} />)}
+    </div>
+
+    <section class="pt-10 border-t border-slate-200">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-extrabold text-slate-900">前十位独立品牌评测档案直达</h2>
+        <a href="/brands/" class="text-sm font-bold text-blue-600 hover:underline">查看全部 31 家品牌 &rarr;</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {TOP_RECOMMENDED_BRANDS.slice(0, 9).map((brand) => <BrandCard brand={brand} />)}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

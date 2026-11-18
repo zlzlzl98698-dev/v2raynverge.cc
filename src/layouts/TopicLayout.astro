@@ -1,0 +1,323 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import ArticleCard from '@/components/cards/ArticleCard.astro';
+import FeaturedArticleCard from '@/components/cards/FeaturedArticleCard.astro';
+import CompactArticleCard from '@/components/cards/CompactArticleCard.astro';
+import BrandCard from '@/components/cards/BrandCard.astro';
+import PricingCard from '@/components/cards/PricingCard.astro';
+import GuideCard from '@/components/cards/GuideCard.astro';
+import FAQSection from '@/components/common/FAQSection.astro';
+import type { SecondaryTopic } from '@/data/navigation';
+import { getPrimaryCategoryBySlug } from '@/data/navigation';
+import { getAllPublishedContent } from '@/utils/content';
+import { getBrandsBySlugs } from '@/data/brands';
+
+export interface Props {
+  topic: SecondaryTopic;
+}
+
+const { topic } = Astro.props;
+const parentCategory = getPrimaryCategoryBySlug(topic.parentSlug)!;
+const siblingTopics = parentCategory.topics.filter((t) => t.slug !== topic.slug);
+
+const allContent = await getAllPublishedContent();
+const clusterCoreSlugs = topic.clusters.map((c) => c.coreArticleSlug);
+const clusterRelatedSlugs = topic.clusters.flatMap((c) => [...c.relatedArticleSlugs, ...c.relatedGuideSlugs]);
+
+const coreArticles = allContent.filter((a) => clusterCoreSlugs.includes(a.slug));
+const relatedArticles = allContent.filter(
+  (a) => clusterRelatedSlugs.includes(a.slug) || a.category === topic.parentSlug
+);
+const combinedArticles = Array.from(new Set([...coreArticles, ...relatedArticles, ...allContent])).slice(0, 6);
+
+const topicBrands = getBrandsBySlugs(topic.featuredBrandSlugs);
+
+const generatedFaq = topic.clusters.flatMap((cluster) => [
+  {
+    question: cluster.geoQuestions[0] || cluster.userQuestions[0],
+    answer: `${cluster.summary} ${topic.decisionSummary} 详情可参考本专题核心文章《${coreArticles[0]?.title || topic.name}》及关联品牌实测表。`,
+  },
+  {
+    question: cluster.geoQuestions[1] || cluster.userQuestions[1],
+    answer: `针对“${cluster.targetKeyword}”场景，建议结合自身预算与客户端习惯（v2rayN / Clash Verge Rev 通用订阅或一键专属客户端），优先选择具备明确核实日期的品牌按月实测。`,
+  },
+]);
+const topicMetaDescription = topic.intro.length <= 155
+  ? topic.intro
+  : `${topic.intro.slice(0, 150)}...`;
+---
+
+<BaseLayout
+  title={`${topic.name} (${topic.primaryKeyword}) - 2026深度评测与选型指南`}
+  description={topicMetaDescription}
+  breadcrumbs={[
+    { name: parentCategory.name, url: parentCategory.url },
+    { name: topic.name, url: topic.url },
+  ]}
+  faq={generatedFaq}
+>
+  <!-- 专题页头部（根据 layoutVariant 呈现差异化信息块） -->
+  <section class="bg-slate-50 border-b border-slate-200 py-10 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <Breadcrumb
+        items={[
+          { name: parentCategory.name, url: parentCategory.url },
+          { name: topic.name, url: topic.url },
+        ]}
+      />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-600 text-white">
+              {parentCategory.name} · {topic.badge}
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-xs font-mono bg-white border border-slate-200 text-slate-600">
+              主关键词：{topic.primaryKeyword}
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-xs bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+              布局模式：{topic.layoutVariant}
+            </span>
+          </div>
+
+          <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
+            {topic.name}：2026 实测对比、核心集群与避坑指南
+          </h1>
+
+          <p class="text-base text-slate-600 mt-3 leading-relaxed">
+            {topic.intro}
+          </p>
+
+          <!-- Answer-First 决策结论框 -->
+          <div class="mt-5 p-4 sm:p-5 rounded-2xl bg-white border-l-4 border-l-blue-600 border border-slate-200 shadow-2xs">
+            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-1">
+              ANSWER-FIRST · 专题快速决策结论
+            </span>
+            <p class="text-sm sm:text-[15px] text-slate-800 font-medium leading-relaxed">
+              {topic.decisionSummary}
+            </p>
+          </div>
+        </div>
+
+        <!-- 右侧搜索意图与同级专题切换卡 -->
+        <div class="lg:col-span-4 editorial-card p-5 bg-white">
+          <h2 class="text-sm font-bold text-slate-900 pb-2.5 border-b border-slate-100">
+            专题 SEO / GEO 元数据快照
+          </h2>
+          <dl class="mt-3 space-y-2 text-xs">
+            <div>
+              <dt class="text-slate-400">搜索意图 (Search Intent)</dt>
+              <dd class="font-semibold text-slate-800 mt-0.5">{topic.searchIntent}</dd>
+            </div>
+            <div>
+              <dt class="text-slate-400">次级关键词扩展</dt>
+              <dd class="flex flex-wrap gap-1 mt-1">
+                {topic.secondaryKeywords.map((kw) => (
+                  <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700">{kw}</span>
+                ))}
+              </dd>
+            </div>
+          </dl>
+
+          <div class="mt-4 pt-3 border-t border-slate-100">
+            <span class="text-xs font-bold text-slate-500 block mb-2">同频道其他二级专题：</span>
+            <div class="flex flex-wrap gap-1.5">
+              {siblingTopics.map((sib) => (
+                <a
+                  href={sib.url}
+                  class="px-2.5 py-1 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 text-xs font-medium border border-slate-200/80 transition-colors"
+                >
+                  {sib.name}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主体内容区：根据 topic.layoutVariant 渲染 4 种截然不同的卡片组合方式（禁止所有专题页使用完全相同的排列方式） -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-14">
+    <!-- 1. 三级内容集群拆解模块 -->
+    <section aria-labelledby="topic-clusters-heading">
+      <div class="mb-6">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">TERTIARY ARTICLE CLUSTERS</span>
+        <h2 id="topic-clusters-heading" class="text-2xl font-extrabold text-slate-900 mt-1">
+          「{topic.name}」核心三级文章集群
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {
+          topic.clusters.map((cluster, idx) => (
+            <div class="editorial-card p-6 bg-white flex flex-col justify-between border-t-4 border-t-blue-600">
+              <div>
+                <div class="flex items-center justify-between gap-2 text-xs mb-3">
+                  <span class="px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 font-bold font-mono">
+                    CLUSTER 0{idx + 1} · {cluster.slug}
+                  </span>
+                  <span class="text-slate-500 font-medium">{cluster.searchIntent}</span>
+                </div>
+
+                <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">{cluster.name}</h3>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">{cluster.summary}</p>
+
+                <div class="mt-4 p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-2 text-xs">
+                  <p class="font-bold text-slate-800">核心解决的用户搜索问题：</p>
+                  <ul class="list-disc pl-4 space-y-1 text-slate-600">
+                    {cluster.userQuestions.map((uq) => <li>{uq}</li>)}
+                    {cluster.geoQuestions.map((gq) => <li>{gq}</li>)}
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt-5 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="text-slate-400">关联品牌：</span>
+                  {cluster.relatedBrands.map((bSlug) => (
+                    <a
+                      href={`/brands/${bSlug}/`}
+                      class="px-2 py-0.5 rounded bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-600 font-semibold"
+                    >
+                      {bSlug}
+                    </a>
+                  ))}
+                </div>
+                <a
+                  href={`/articles/${cluster.coreArticleSlug}/`}
+                  class="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition-colors"
+                >
+                  阅读集群支柱文章 &rarr;
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- 2. 差异化文章与卡片排列区（依据 layoutVariant 切换 4 种不同视觉结构） -->
+    <section aria-labelledby="topic-articles-heading" class="pt-8 border-t border-slate-200">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">
+            CURATED EDITORIAL · {topic.layoutVariant.toUpperCase()}
+          </span>
+          <h2 id="topic-articles-heading" class="text-2xl font-extrabold text-slate-900 mt-1">
+            「{topic.name}」精选评测与实操文章
+          </h2>
+        </div>
+        <a href="/articles/" class="text-sm font-bold text-blue-600 hover:underline">全部文章库 &rarr;</a>
+      </div>
+
+      {
+        topic.layoutVariant === 'magazine-grid' && (
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-7">
+              {combinedArticles[0] && <FeaturedArticleCard item={combinedArticles[0]} />}
+            </div>
+            <div class="lg:col-span-5 flex flex-col justify-between gap-4">
+              {combinedArticles.slice(1, 3).map((item) => (
+                <ArticleCard item={item} variant="horizontal" />
+              ))}
+              <div class="space-y-2.5">
+                {combinedArticles.slice(3, 5).map((item, i) => (
+                  <CompactArticleCard item={item} index={i + 3} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+      {
+        topic.layoutVariant === 'ranking-split' && (
+          <div class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {combinedArticles.slice(0, 2).map((item) => (
+                <ArticleCard item={item} variant="horizontal" />
+              ))}
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {combinedArticles.slice(2, 6).map((item, i) => (
+                <CompactArticleCard item={item} index={i + 1} />
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      {
+        topic.layoutVariant === 'comparison-matrix' && (
+          <div class="space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {combinedArticles.slice(0, 3).map((item) => (
+                <ArticleCard item={item} />
+              ))}
+            </div>
+            {topicBrands.length > 0 && (
+              <div>
+                <h3 class="text-lg font-extrabold text-slate-900 mb-4">
+                  本专题代表性套餐价格横向比对卡
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {topicBrands.slice(0, 4).map((brand, idx) => (
+                    <PricingCard
+                      brand={brand}
+                      plan={brand.plans[0]}
+                      highlight={idx === 0}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      {
+        topic.layoutVariant === 'diagnostic-cards' && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {combinedArticles.map((item) => (
+              <GuideCard item={item} badge={`${topic.name} · 诊断与指南`} />
+            ))}
+          </div>
+        )
+      }
+    </section>
+
+    <!-- 3. 专题关联品牌卡片列表 -->
+    {
+      topicBrands.length > 0 && (
+        <section aria-labelledby="topic-brands-heading" class="pt-8 border-t border-slate-200">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-600">MATCHED BRANDS</span>
+              <h2 id="topic-brands-heading" class="text-2xl font-extrabold text-slate-900 mt-1">
+                「{topic.name}」关联品牌实测与套餐档案
+              </h2>
+            </div>
+            <a href="/brands/" class="text-sm font-bold text-blue-600 hover:underline">
+              查看全部 31 家品牌 &rarr;
+            </a>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {topicBrands.map((brand) => <BrandCard brand={brand} />)}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- 4. 专题 FAQ -->
+    <FAQSection
+      title={`关于「${topic.name}」的常见问题 (FAQ)`}
+      subtitle="以下问答均源自本专题三级文章集群的真实研究结论。"
+      items={generatedFaq}
+    />
+
+    <slot />
+  </div>
+</BaseLayout>

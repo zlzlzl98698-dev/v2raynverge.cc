@@ -1,0 +1,11 @@
+源页面类型,源页面URL,目标页面类型,目标页面URL,锚文本策略,链接位置与用户下一步意图
+首页,/,一级专题频道,/airport/,机场推荐频道,顶部主导航与四大专题快捷卡片
+首页,/,品牌数据库,/brands/,检索31家品牌数据库,Hero主按钮、第8区数据库入口与Footer
+一级专题,/airport/,二级专题,/airport/recommend/,2026机场推荐,频道顶部胶囊导航与7大专题卡片网格
+二级专题,/airport/recommend/,支柱长文,/articles/2026-airport-recommendation-guide/,阅读集群支柱文章,三级集群卡片与精选文章模块
+支柱长文,/articles/2026-airport-recommendation-guide/,品牌深度评测,/reviews/guangsuyun-in-depth-review/,光速云2026深度评测,正文对比表、侧边栏关联品牌与文末推荐块
+品牌深度评测,/reviews/guangsuyun-in-depth-review/,横向对比,/comparisons/guangsuyun-vs-muguang-vs-feimao/,光速云vs暮光加速vs飞猫云对比,延伸阅读与同类型品牌对比区
+品牌详情页,/brands/guangsuyun/,客户端教程,/guides/v2rayn-complete-tutorial-windows/,v2rayN完整安装与配置教程,品牌页第8节客户端配置引导模块
+品牌详情页,/brands/guangsuyun/,客户端教程,/guides/clash-verge-rev-subscription-import-guide/,Clash Verge Rev订阅导入指南,品牌页第8节客户端配置引导模块
+客户端教程,/guides/clash-troubleshooting-connection-timeout/,风险预警,/resources/runaway-warning/,机场跑路预警与主备双订阅指南,排障第5步交叉验证与侧边栏急救入口
+风险页面,/resources/risk-intelligence/,品牌详情页,/brands/kexin/,可信云透明度档案,风险情报审计表格直达链接

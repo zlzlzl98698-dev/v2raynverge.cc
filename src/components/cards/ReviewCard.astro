@@ -1,0 +1,62 @@
+---
+import type { UnifiedContentItem } from '@/utils/content';
+import { getBrandBySlug } from '@/data/brands';
+
+export interface Props {
+  item: UnifiedContentItem;
+}
+
+const { item } = Astro.props;
+const primaryBrand = item.relatedBrands?.[0] ? getBrandBySlug(item.relatedBrands[0]) : undefined;
+---
+
+<article class="editorial-card overflow-hidden bg-white flex flex-col justify-between group h-full">
+  <div>
+    <a href={item.url} class="block relative aspect-[16/9] bg-slate-100 overflow-hidden">
+      <img
+        src={item.cover}
+        alt={item.coverAlt}
+        loading="lazy"
+        width="600"
+        height="315"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      />
+      <div class="absolute top-3 left-3 flex items-center gap-2">
+        <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-900/90 text-white">
+          深度品牌评测
+        </span>
+        {primaryBrand && (
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-600 text-white">
+            {primaryBrand.lineType}
+          </span>
+        )}
+      </div>
+    </a>
+
+    <div class="p-5">
+      <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+        <span>测试日期：{item.testDate}</span>
+        <span>{item.readingTimeMinutes} 分钟深度报告</span>
+      </div>
+      <h3 class="text-lg font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+        <a href={item.url}>{item.title}</a>
+      </h3>
+      <p class="text-sm text-slate-600 mt-2 line-clamp-3 leading-relaxed">
+        {item.excerpt}
+      </p>
+    </div>
+  </div>
+
+  <div class="px-5 pb-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+    {primaryBrand ? (
+      <a href={`/brands/${primaryBrand.slug}/`} class="text-slate-600 hover:text-blue-600 font-semibold">
+        关联档案：{primaryBrand.name} &rarr;
+      </a>
+    ) : (
+      <span class="text-slate-500">{item.author}</span>
+    )}
+    <a href={item.url} class="font-bold text-blue-600">
+      阅读实测 &rarr;
+    </a>
+  </div>
+</article>

@@ -1,0 +1,26 @@
+# =====================================================================
+# v2rayn指南 (https://v2raynverge.cc/) 搜索引擎抓取控制文件 (robots.txt)
+# 目标搜索引擎：Google、Bing、百度 (Baiduspider)、神马 (yisouspider)
+# =====================================================================
+
+User-agent: *
+Allow: /
+Disallow: /draft/
+Disallow: /api/
+
+# 明确允许主流中文与全球搜索引擎爬虫深度抓取
+User-agent: Googlebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: yisouspider
+Allow: /
+
+# 站点地图声明（同时提供通用 sitemap.xml 与标准 sitemap-index.xml）
+Sitemap: https://v2raynverge.cc/sitemap.xml
+Sitemap: https://v2raynverge.cc/sitemap-index.xml

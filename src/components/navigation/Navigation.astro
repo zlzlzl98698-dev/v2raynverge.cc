@@ -1,0 +1,87 @@
+---
+import { PRIMARY_CATEGORIES } from '@/data/navigation';
+
+const currentPath = Astro.url.pathname;
+
+function isCategoryActive(catUrl: string, catId: string): boolean {
+  if (currentPath.startsWith(catUrl)) return true;
+  if (catId === 'airport' && (currentPath.startsWith('/reviews/') || currentPath.startsWith('/brands/'))) return true;
+  if (catId === 'clash' && currentPath.startsWith('/guides/')) return true;
+  return false;
+}
+---
+
+<nav aria-label="主导航" class="hidden lg:flex items-center gap-1">
+  {
+    PRIMARY_CATEGORIES.map((category) => {
+      const active = isCategoryActive(category.url, category.id);
+      return (
+        <div class="relative group">
+          <a
+            href={category.url}
+            class:list={[
+              'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[15px] font-semibold transition-colors',
+              active
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-slate-700 hover:text-blue-600 hover:bg-slate-50',
+            ]}
+            aria-current={active ? 'page' : undefined}
+          >
+            <span>{category.name}</span>
+            <svg
+              class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-transform duration-200 group-hover:rotate-180"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
+
+          <!-- 桌面端下拉二级专题菜单（支持鼠标悬停与键盘 focus-within） -->
+          <div class="invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-150 absolute left-0 top-full pt-2 w-80 z-50">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xl p-3">
+              <div class="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-wider text-blue-600">{category.badge}</p>
+                  <p class="text-xs text-slate-500 mt-0.5">7 个独立二级专题页</p>
+                </div>
+                <a
+                  href={category.url}
+                  class="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  进入频道 &rarr;
+                </a>
+              </div>
+              <ul class="mt-2 grid grid-cols-1 gap-1">
+                {category.topics.map((topic) => {
+                  const isTopicActive = currentPath === topic.url;
+                  return (
+                    <li>
+                      <a
+                        href={topic.url}
+                        class:list={[
+                          'flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-colors',
+                          isTopicActive
+                            ? 'bg-blue-50 text-blue-600 font-semibold'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-blue-600',
+                        ]}
+                      >
+                        <span>{topic.name}</span>
+                        <span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                          {topic.badge}
+                        </span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        </div>
+      );
+    })
+  }
+</nav>

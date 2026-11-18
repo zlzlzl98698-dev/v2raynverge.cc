@@ -1,0 +1,135 @@
+---
+import type { AirportBrand, UnlockStatus } from '@/data/brands';
+
+export interface Props {
+  brand: AirportBrand;
+}
+
+const { brand } = Astro.props;
+const m = brand.unlockMatrix;
+
+interface ServiceItem {
+  name: string;
+  category: 'AI 生产力工具' | '海外流媒体平台';
+  status: UnlockStatus;
+}
+
+const services: ServiceItem[] = [
+  { name: 'ChatGPT (OpenAI)', category: 'AI 生产力工具', status: m.chatgpt },
+  { name: 'Claude (Anthropic)', category: 'AI 生产力工具', status: m.claude },
+  { name: 'Google Gemini', category: 'AI 生产力工具', status: m.gemini },
+  { name: 'Netflix (奈飞)', category: '海外流媒体平台', status: m.netflix },
+  { name: 'Disney+', category: '海外流媒体平台', status: m.disneyPlus },
+  { name: 'YouTube 4K/Premium', category: '海外流媒体平台', status: m.youtube },
+  { name: 'HBO Max', category: '海外流媒体平台', status: m.hboMax },
+  { name: 'TikTok (跨区)', category: '海外流媒体平台', status: m.tiktok },
+  { name: 'Spotify', category: '海外流媒体平台', status: m.spotify },
+];
+
+const statusConfig: Record<
+  UnlockStatus,
+  { badge: string; dotColor: string; borderColor: string; textColor: string; desc: string }
+> = {
+  supported: {
+    badge: 'MEASURED · 实测支持',
+    dotColor: '#10B981',
+    borderColor: 'border-emerald-500/30',
+    textColor: 'text-emerald-300',
+    desc: '独立测试或核实记录支持直接解锁',
+  },
+  partial: {
+    badge: 'PARTIAL · 视节点而定',
+    dotColor: '#F59E0B',
+    borderColor: 'border-amber-500/30',
+    textColor: 'text-amber-300',
+    desc: '部分原生节点可用，需在客户端手动切换区域',
+  },
+  vendor: {
+    badge: 'VENDOR CLAIM · 品牌宣称',
+    dotColor: '#38BDF8',
+    borderColor: 'border-sky-500/30',
+    textColor: 'text-sky-300',
+    desc: '品牌资料显示支持，建议结合实际节点验证',
+  },
+  unsupported: {
+    badge: 'UNAVAILABLE · 实测受限',
+    dotColor: '#EF4444',
+    borderColor: 'border-rose-500/30',
+    textColor: 'text-rose-300',
+    desc: '实测记录显示多数节点失败或区域受限',
+  },
+  untested: {
+    badge: 'NOT TESTED · 尚未测试',
+    dotColor: '#64748B',
+    borderColor: 'border-slate-700',
+    textColor: 'text-slate-400',
+    desc: '当前资料缺乏逐项实测数据，不做主观推断',
+  },
+};
+---
+
+<section
+  class="observatory-panel p-5 sm:p-6 my-8 shadow-lg"
+  aria-label={`${brand.name} AI 与流媒体解锁可用性矩阵`}
+>
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-700/80">
+    <div>
+      <div class="flex items-center gap-2">
+        <h3 class="text-base sm:text-lg font-extrabold text-white">
+          {brand.name} · Streaming & AI Availability Matrix
+        </h3>
+        <span class="px-2 py-0.5 rounded text-[11px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+          9 SERVICES MONITORED
+        </span>
+      </div>
+      <p class="text-xs text-slate-400 mt-1">
+        严格区分：独立测试支持 / 部分节点支持 / 品牌宣称支持 / 实测不支持 / 尚未测试
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 text-emerald-300">
+        <i class="w-2 h-2 rounded-full bg-emerald-400"></i> 实测支持
+      </span>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 text-amber-300">
+        <i class="w-2 h-2 rounded-full bg-amber-400"></i> 视节点而定
+      </span>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 text-sky-300">
+        <i class="w-2 h-2 rounded-full bg-sky-400"></i> 品牌宣称
+      </span>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-slate-900 text-slate-400">
+        <i class="w-2 h-2 rounded-full bg-slate-500"></i> 待核实
+      </span>
+    </div>
+  </div>
+
+  <!-- 三列响应式网格 -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mt-5">
+    {
+      services.map((svc) => {
+        const cfg = statusConfig[svc.status];
+        return (
+          <div class:list={['p-4 rounded-xl bg-slate-900/85 border', cfg.borderColor]}>
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+              <span class="text-[11px] font-mono text-slate-400">{svc.category}</span>
+              <span class="inline-flex items-center gap-1.5 text-[11px] font-mono font-bold" class:list={[cfg.textColor]}>
+                <span class="w-2 h-2 rounded-full" style={`background-color: ${cfg.dotColor};`} />
+                {cfg.badge}
+              </span>
+            </div>
+            <h4 class="text-sm sm:text-base font-bold text-white">{svc.name}</h4>
+            <p class="text-xs text-slate-400 mt-1">{cfg.desc}</p>
+          </div>
+        );
+      })
+    }
+  </div>
+
+  <!-- 文字说明与备注 -->
+  <div class="mt-5 pt-3.5 border-t border-slate-800 text-xs text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <p>
+      <strong>矩阵核实结论：</strong>{m.notes}
+    </p>
+    <span class="font-mono text-[11px] text-slate-500 shrink-0">[RegionRestrictionCheck Spec]</span>
+  </div>
+</section>

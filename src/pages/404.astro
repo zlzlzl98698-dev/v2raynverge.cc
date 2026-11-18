@@ -1,0 +1,59 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SearchBox from '@/components/search/SearchBox.astro';
+import { PRIMARY_CATEGORIES } from '@/data/navigation';
+---
+
+<BaseLayout
+  title="404 页面未找到 - v2rayn指南 (v2raynverge.cc)"
+  description="您访问的页面不存在或路径已变更，请使用站内全文搜索或通过四大核心专题导航继续浏览。"
+  noindex={true}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center" data-pagefind-ignore>
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 font-mono font-black text-2xl mb-4">
+      404
+    </div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+      抱歉，您访问的页面不存在或 URL 已更新
+    </h1>
+    <p class="text-base text-slate-600 mt-3 max-w-xl mx-auto">
+      本站不会将错误链接强制回退到首页。您可以直接通过下方全文搜索框查找所需的机场评测与 v2rayN / Clash 教程，或点击四大核心频道入口。
+    </p>
+
+    <div class="my-8 text-left">
+      <SearchBox />
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-left mt-8">
+      {
+        PRIMARY_CATEGORIES.map((cat) => (
+          <a
+            href={cat.url}
+            class="editorial-card p-4 bg-white hover:border-blue-500 block group"
+          >
+            <span class="text-xs font-bold text-blue-600">{cat.badge}</span>
+            <h2 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 mt-1">
+              {cat.name} &rarr;
+            </h2>
+            <p class="text-xs text-slate-500 mt-1 line-clamp-2">{cat.description}</p>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+      <a
+        href="/"
+        class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-colors"
+      >
+        返回网站首页
+      </a>
+      <a
+        href="/brands/"
+        class="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold transition-colors"
+      >
+        浏览 31 家品牌数据库
+      </a>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,67 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumb from '@/components/navigation/Breadcrumb.astro';
+import { SITE_CONFIG } from '@/data/site';
+---
+
+<BaseLayout
+  title="关于我们、隐私政策、使用声明与商业推广披露 - v2rayn指南"
+  description="v2rayn指南 (v2raynverge.cc) 评测方法论、商业合作与推广链接透明披露声明、隐私保护政策、合规使用条款及编辑部联系方式。"
+  breadcrumbs={[{ name: '关于与合规声明', url: '/about/' }]}
+>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <Breadcrumb items={[{ name: '关于与合规声明', url: '/about/' }]} />
+
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-6">
+      关于 {SITE_CONFIG.brandName} ({SITE_CONFIG.domain}) 及透明合规声明
+    </h1>
+
+    <div class="prose-editorial space-y-8">
+      <section class="editorial-card p-6 sm:p-8 bg-white">
+        <h2 class="!mt-0">一、媒体定位与独立评测准则</h2>
+        <p>
+          <strong>{SITE_CONFIG.brandName}（{SITE_CONFIG.domain}）</strong> 是一家专注于跨境网络传输技术科普、代理客户端（v2rayN / Clash Verge Rev / Mihomo / sing-box）实操排障以及 31 家独立机场品牌数据审计的中文技术评测媒体。
+        </p>
+        <p>
+          我们严格遵循“数据可溯源、结论可验证”的工程规范：所有收录品牌均明确区分<strong>独立实测数据（Measured）</strong>、<strong>品牌官方资料（Vendor）</strong>、<strong>历史记录档案（Historical）</strong>与<strong>待核实数据（Pending）</strong>，绝不将示例或推测数据伪装成已经核实的真实数据。
+        </p>
+      </section>
+
+      <section class="editorial-card p-6 sm:p-8 bg-white" id="disclosure">
+        <h2 class="!mt-0">二、商业推广与联盟佣金披露 (Affiliate Disclosure)</h2>
+        <p>
+          为了维持服务器托管、节点订阅抽样测试及原创内容持续更新，本站部分品牌卡片与注册入口包含联盟推广链接（均规范标记 <code>rel="nofollow sponsored noopener"</code>）。
+        </p>
+        <ul>
+          <li><strong>价格一致性承诺</strong>：{SITE_CONFIG.disclosure.affiliateNotice}</li>
+          <li><strong>评测独立性承诺</strong>：{SITE_CONFIG.disclosure.editorialIndependence}</li>
+          <li><strong>数据统一管理</strong>：全站所有推广链接均由统一品牌数据源管理，并在按钮旁提供显式的推广披露说明与适用限制提示。</li>
+        </ul>
+      </section>
+
+      <section class="editorial-card p-6 sm:p-8 bg-white" id="privacy">
+        <h2 class="!mt-0">三、隐私政策 (Privacy Policy)</h2>
+        <p>
+          本站采用纯静态 HTML 架构构建，不要求访客注册登录，不收集或存储任何个人身份敏感信息，亦不出售任何用户访问数据。站内全文搜索基于本地静态索引（Pagefind）在您的浏览器端直接完成检索。
+        </p>
+      </section>
+
+      <section class="editorial-card p-6 sm:p-8 bg-white" id="terms">
+        <h2 class="!mt-0">四、合规使用声明与免责条款</h2>
+        <p>
+          {SITE_CONFIG.disclosure.riskWarning}
+        </p>
+        <p>
+          第三方机场品牌的套餐价格、节点在线率及退款政策由各独立服务商自行制定并可能随时间调整。建议用户在选购任何付费套餐前，优先采用月付或小额套餐验证本地网络环境。
+        </p>
+      </section>
+
+      <section class="editorial-card p-6 sm:p-8 bg-slate-50">
+        <h2 class="!mt-0">五、联系编辑部</h2>
+        <p class="mb-0">
+          勘误反馈、品牌资料核实补充或技术交流，请发送邮件至：<a href={`mailto:${SITE_CONFIG.contactEmail}`}>{SITE_CONFIG.contactEmail}</a>（最后更新日期：{SITE_CONFIG.updatedDate}）。
+        </p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
